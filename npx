@@ -1,0 +1,5 @@
+
+[4mSequelize CLI [Node: 14.15.4, CLI: 6.4.1, ORM: 6.23.0][24m
+
+New model was created at [94mC:\web programming\device-logistic-server\backend\models\ordershipping.js[39m .
+New migration was created at [94mC:\web programming\device-logistic-server\backend\migrations\20221016091937-create-order-shipping.js[39m .
