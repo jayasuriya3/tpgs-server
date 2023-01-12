@@ -1,16 +1,17 @@
 const db = require("../model/model.js");
 const seqOp = db.sequelize;
 const Op = db.Sequelize.Op;
-const User = db.users;
+const User = require("../models").User;
 const CustomerAssign = db.customerAssign;
 const Practices = db.practices;
 const AssistantAssign = db.assistantAssigns;
 const Cryptr = require("cryptr");
 const cryptr = new Cryptr("-+-");
 const speakeasy = require("speakeasy");
-const QRCode = require("qrcode");
+const QRCode = require("qrcode"); 
 const path = require("path");
 const fs = require("fs");
+const jwt = require("jsonwebtoken");
 // const dateFormat = require('dateformat');
 const moment = require('moment')
 
@@ -21,17 +22,25 @@ exports.login = (req, res) => {
 		ip_address: req.body.ipAddress,
 		is_activity: true,
 	};
-
+	console.log("userInf", userInf)
 	User.findAll({
 		where: {
 			[Op.or]: [{ username: userInf }, { email: userInf }],
 		},
 	})
 		.then((data) => {
+			console.log("data",data)
 			console.log(data[0].dataValues.password);
 			console.log(cryptr.decrypt(data[0].dataValues.password));
 			savedPassword = cryptr.decrypt(data[0].dataValues.password);
 			if (savedPassword == currentPassword) {
+				const token = jwt.sign(
+					{ id: data[0].dataValues.id, email: data[0].dataValues.email, role: data[0].dataValues.role },
+					process.env.ACCESS_TOKEN_SECRET,
+					{
+					  expiresIn: "1d",
+					}
+				  );
 				User.update(updateIpQuery, {
 					where: {
 						email: data[0].dataValues.email,
@@ -47,6 +56,7 @@ exports.login = (req, res) => {
 							userName: data[0].dataValues.username,
 							userEmail: data[0].dataValues.email,
 							isTOTP: !!data[0].dataValues.totpAuthUrl,
+							token: token
 						};
 						res.send(returnData);
 					})
