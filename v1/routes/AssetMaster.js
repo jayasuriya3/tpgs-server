@@ -20,17 +20,17 @@ Supervisor login
 router.post("/login", Controller.AssetMaster.AssetMasterLogin);
 //add service
 router.post("/addService", Authenticate.verifyJWT,Controller.AssetMaster.AddService);
-router.get("/allService",Authenticate.verifyJWT, Controller.AssetMaster.AllService);
+router.get("/allService", Controller.AssetMaster.AllService);
 //count device
-router.get("/countDevice/:startDate/:endDate",Authenticate.verifyJWT,Authenticate.verifyAssetMaster,Controller.AssetMaster.countDevice);
+router.get("/countDevice/:startDate/:endDate",Controller.AssetMaster.countDevice);
 //vendor count
-router.get("/countVendor",Authenticate.verifyJWT,Authenticate.verifyAssetMaster, Controller.AssetMaster.countVendor);
+router.get("/countVendor", Controller.AssetMaster.countVendor);
 
-router.get("/OrderSummary/:startDate/:endDate",Authenticate.verifyJWT,Authenticate.verifyAssetMaster,Controller.AssetMaster.OrderSummary);
+router.get("/OrderSummary/:startDate/:endDate",Controller.AssetMaster.OrderSummary);
 //orderTrend
-router.get("/orderTrend/:startDate/:endDate/:currentMonth",Authenticate.verifyJWT,Authenticate.verifyAssetMaster, Controller.AssetMaster.orderTrend);
+router.get("/orderTrend/:startDate/:endDate/:currentMonth", Controller.AssetMaster.orderTrend);
 //device analysis
-router.get("/deviceAnalysis/:startDate/:endDate", Authenticate.verifyJWT,Authenticate.verifyAssetMaster,Controller.AssetMaster.deviceAnalysis);
+router.get("/deviceAnalysis/:startDate/:endDate",Controller.AssetMaster.deviceAnalysis);
 //ClosedOrderCount
 router.get("/ClosedOrderCount",Authenticate.verifyJWT, Authenticate.verifyAssetMaster,Controller.AssetMaster.ClosedOrderCount);
 //getDeviceStatusAnalysis available device count
@@ -52,21 +52,21 @@ router.get("/getViewDevice/:vendor/:service/:accessory/:accessoryType/:serviceId
 //get defective device
 router.get("/getDefectiveDevice/:vendor/:service/:accessory/:accessoryType/:serviceId/:accessoryId/:vendorId",Authenticate.verifyJWT, Controller.AssetMaster.getDefectiveDevice);
 //getallVendor
-router.get("/allVendor",Authenticate.verifyJWT, Controller.AssetMaster.AllVendor);
+router.get("/allVendor", Controller.AssetMaster.AllVendor);
 //all accessory
-router.get("/allAccessory",Authenticate.verifyJWT, Controller.AssetMaster.AllAccessory);
+router.get("/allAccessory",Controller.AssetMaster.AllAccessory);
 //all service list
-router.get("/AllServiceList", Authenticate.verifyJWT,Controller.AssetMaster.AllServiceList);
+router.get("/AllServiceList", Controller.AssetMaster.AllServiceList);
 //all accessory list in accessory page
-router.get("/AllAccessoryList",Authenticate.verifyJWT, Controller.AssetMaster.AllAccessoryList);
+router.get("/AllAccessoryList", Controller.AssetMaster.AllAccessoryList);
 //all customer
-router.get("/allCustomer",Authenticate.verifyJWT, Controller.AssetMaster.AllCustomer);
+router.get("/allCustomer", Controller.AssetMaster.AllCustomer);
 //get count device
 router.post("/getCountDevice", Controller.AssetMaster.getCountDevice);
 //post device count
 router.get("/DeviceGroup/:serviceId/:accessoryId/:accessory", Authenticate.verifyJWT,Controller.AssetMaster.DeviceGroup);
 //get all devices list
-router.get("/DeviceGroupListAll",Authenticate.verifyJWT, Controller.AssetMaster.DeviceGroupList);
+router.get("/DeviceGroupListAll", Controller.AssetMaster.DeviceGroupList);
 //get one  vendor
 router.get("/vendorDetail/:id",Authenticate.verifyJWT, Controller.AssetMaster.getOneVendor);
 //get one accessory detail
@@ -108,7 +108,7 @@ router.get("/getAssignAccessoryInfoDevice/:ordersId",Authenticate.verifyJWT, Con
 router.post("/postOrders",Authenticate.verifyJWT, Authenticate.verifyJWT,Controller.AssetMaster.postOrders);
 router.post("/updateOrder",Authenticate.verifyJWT, Authenticate.verifyJWT,Controller.AssetMaster.updateOrder);
 //all order
-router.get("/AllOrder",Authenticate.verifyJWT, Controller.AssetMaster.AllOrder);
+router.get("/AllOrder", Controller.AssetMaster.AllOrder);
 //getMinMaxYear
 router.get("/getMinMaxYear",Authenticate.verifyJWT, Controller.AssetMaster.getMinMaxYear);
 //ClosedReturnUpdate
@@ -125,7 +125,7 @@ router.get("/assignedDevice/:vendor/:service/:accessory/:accessoryType/:serviceI
 //postShipping
 router.post("/postShipping",Authenticate.verifyJWT, Controller.AssetMaster.postShipping);
 //close order
-router.get("/CloseOrder",Authenticate.verifyJWT, Controller.AssetMaster.CloseOrder);
+router.get("/CloseOrder", Controller.AssetMaster.CloseOrder);
 //get shipping detail
 router.get("/shippingDetail/:shippingOrderId",Authenticate.verifyJWT, Controller.AssetMaster.shippingDetail);
 //all patient get route

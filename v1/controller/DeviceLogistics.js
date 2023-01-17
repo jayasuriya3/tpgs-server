@@ -329,9 +329,11 @@ module.exports.AddAccessoryKit = async (req, res, next) => {
   }
 };
 module.exports.kitDashboard = async (req, res) => {
+  
   try {
+  console.time("kitDashboard")
     //counting assigned kit which is delivered
-    const kitDelivered=await Kit.count({
+    const kitDelivered=  Kit.count({
   where: {
 
     assignStatus: "Assigned",
@@ -345,7 +347,7 @@ module.exports.kitDashboard = async (req, res) => {
 
 })
    //unassigned kits in Stock
-const kitStock=await Kit.count({
+const kitStock= Kit.count({
 where:{
   assignStatus:"UnAssigned",
   createdAt: {
@@ -356,7 +358,7 @@ where:{
 }
 })
 //get complained device for dashboard based on per month
-const ComplainDevice=await Device.count({
+const ComplainDevice= Device.count({
 where:{
 
     deviceStatus:{[Op.or]:['Damaged','Defective','Missing']},
@@ -371,7 +373,142 @@ where:{
 }
 })
 
-res.status(200).json({kitDelivered:kitDelivered,kitStock:kitStock,ComplainDevice:ComplainDevice})
+//res.status(200).json({kitDelivered:kitDelivered,kitStock:kitStock,ComplainDevice:ComplainDevice})
+
+const assignedKit= Kit.count({
+  where: {
+
+    assignStatus: "Assigned",
+    assignedDate: {
+      [Op.gte]: new Date(req.params.startDate),
+      [Op.lt]: new Date(req.params.endDate)
+    }  
+   
+    }      
+  
+
+})
+   //unassigned kits in Stock
+const unassignedKit= Kit.count({
+where:{
+  assignStatus:"UnAssigned",
+  createdAt: {
+    [Op.gte]: new Date(req.params.startDate),
+    [Op.lt]: new Date(req.params.endDate)
+  }  
+
+}
+})
+//get complained device for dashboard based on per month
+
+//res.status(200).json({assignedKit:assignedKit,unassignedKit:unassignedKit})
+
+    //counting assigned kit which is delivered
+    const ComplainedDevice= Device.findAll({
+      where:{
+      
+          deviceStatus:{[Op.or]:['Damaged','Defective','Missing']},
+          kitId:{
+            [Op.not]:null
+          },
+          deviceStatusUpdateDate: {
+            [Op.gte]: new Date(req.params.startDate),
+            [Op.lt]: new Date(req.params.endDate)
+          } 
+         
+      
+      },
+       include:[{
+            model:Kit,
+            include:[{
+              model:Logistic,
+              
+            }]
+          }]
+
+      })
+   //unassigned kits in Stock
+
+//get complained device for dashboard based on per month
+
+const kitSummary= Kit.findAll({
+  where: {
+
+    assignStatus: "Assigned",
+    assignedDate: {
+      [Op.gte]: new Date(req.params.startDate),
+      [Op.lt]: new Date(req.params.endDate)
+    }  
+   
+    }      
+  
+
+})
+
+const logisticAnalysis= Logistic.findAll({
+
+  group: ["logisticName"],
+  attributes: [
+    "logisticName",
+
+    [sequelize.fn("COUNT", sequelize.col("logisticName")), "count"],
+  ],
+  order: [[Sequelize.literal("count"), "DESC"]],
+  where: { 
+    
+    createdAt: {
+      [Op.gte]: new Date(req.params.startDate),
+      [Op.lt]: new Date(req.params.endDate)
+    }
+  }, 
+  includeIgnoreAttributes: false,
+
+  raw: true,
+})
+
+const logisticSummary =  Kit.findAll({
+    
+  include:[{
+    model:Patient,
+   
+  },
+{
+  model:Logistic,
+  where:{
+    shippingStatus:{
+      [Op.or]:["Shipped","In Transit","Delivered"]
+    },
+    createdAt: {
+      [Op.gte]: new Date(req.params.startDate),
+      [Op.lt]: new Date(req.params.endDate)
+    }
+  
+  }
+
+}
+
+]
+});
+
+  // .then((result) => {
+  //   console.log("result", result);
+  //  //res.send(result)
+  // })
+  const [PromisekitDelivered, promisekitStock,promiseComplainDevice,promiseassignedKit,promiseunassingedKit,promiseComplainedDevice,promisekitSummary,promiselogisticAnalysis,PromiselogisticSummary
+    
+    ] = await Promise.all([kitDelivered, kitStock,ComplainDevice,
+      assignedKit,unassignedKit,ComplainedDevice,kitSummary,logisticAnalysis,logisticSummary
+      
+      ]);
+      console.timeEnd('blocking');
+      
+      res.status(200).json({kitDelivered:PromisekitDelivered,kitStock:promisekitStock,ComplainDevice:promiseComplainDevice,assignedKit:promiseassignedKit,unassignedKit:promiseunassingedKit,ComplainedDevice:promiseComplainedDevice,kitSummary:promisekitSummary,logisticAnalysis:promiselogisticAnalysis,
+        logisticSummary:PromiselogisticSummary
+      })
+      
+//res.status(200).json(kitSummary)
+console.timeEnd("kitDashboard")
+
   } catch (error) {
     res.status(400).send(error);
     console.log(error);
@@ -536,18 +673,23 @@ module.exports.viewKitAccessoryDetail = async (req, res, next) => {
       where: {
        // serviceId: req.body.serviceId,
        // accessoryId: req.body.accessoryId,
-        kitId: req.body.kitId
+        kitId: req.params.kitId
       },
       include:[{
         model: Service,
+        attribute:['service']
        // required: true // this will inner join the Service model
       }, {
         model: Accessory,
+        attribute:['accessory']
       //  required: true // this will inner join the Accessory model
       }, {
         model: Vendor,
+        attribute:['vendorName']
        // required: true // this will inner join the Vendor model
-      }] 
+      },
+   
+    ]
     });
    
     res.send(kitAccessory);
@@ -558,6 +700,58 @@ module.exports.viewKitAccessoryDetail = async (req, res, next) => {
     console.log(error);
   }
 };
+
+module.exports.viewKitAccessoryDetailCompleted = async (req, res, next) => {
+  try {
+   
+    const kitAccessory = await Device.findAll({
+      where: {
+       // serviceId: req.body.serviceId,
+       // accessoryId: req.body.accessoryId,
+        kitId: req.params.kitId
+      },
+      include:[{
+        model: Service,
+       // required: true // this will inner join the Service model
+      }, {
+        model: Accessory,
+      //  required: true // this will inner join the Accessory model
+      }, {
+        model: Vendor,
+       // required: true // this will inner join the Vendor model
+      },
+    {
+      model:Kit,
+      attributes:['patientName']
+    }
+    ]
+    });
+   
+    res.send(kitAccessory);
+
+  } catch (error) {
+    return next({ status: 404, message: error });
+    res.status(400).send(error);
+    console.log(error);
+  }
+};
+//get logistic min max year
+module.exports.getLogisticMinMaxYear = async (req, res, next) => {
+  try {
+    const minYear = await Kit.min('createdAt');
+    const maxYear = await Kit.max('updatedAt');
+    console.log("minYear,maxYear",minYear,maxYear)
+    res.json({minYear:minYear,maxYear:maxYear});
+
+  }
+
+   catch (error) {
+    return next({ status: 404, message: error });
+    res.status(400).send(error);
+    console.log(error);
+  }
+};
+
 module.exports.viewKitAccessoryDetailById = async (req, res, next) => {
   try {
     console.log("api hitted",req.params.kitId)
@@ -896,6 +1090,10 @@ module.exports.viewKitAccessoriesDeviceDetail = async (req, res, next) => {
 
         deviceId: req.params.deviceId
       },
+      include:[{
+        model:Kit,
+        attribute:['patientName']
+      }]
     });
   
     res.send(kit);
