@@ -144,6 +144,7 @@ app.use(
       "https://tpgs-git-develop-faisalmahamudcs.vercel.app",
       "https://pulse-gate-suites.vercel.app",
       "https://tpgs-mono-git-develop-faisalmahamudcs.vercel.app",
+      "https://tpgs-mono.vercel.app",
 
       "*",
     ],
@@ -590,6 +591,7 @@ const io = new Server(server, {
       "https://asset-master-psi.vercel.app",
       "https://device-logistic.vercel.app",
       "https://device-logistic-git-develop-faisalmahamudcs.vercel.app",
+      "https://tpgs-mono.vercel.app",
       "*",
       "https://tpgs-mono-git-develop-faisalmahamudcs.vercel.app"
 
