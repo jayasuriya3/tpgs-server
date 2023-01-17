@@ -28,7 +28,7 @@ const Joi = require("joi");
 const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 //const logger = require("./logger/logger");
-const connection = require("./common/connection");
+//const connection = require("./common/connection");
 const Model = require("./model/index");
 const winston = require("winston");
 const expressWinston = require("express-winston");
@@ -231,7 +231,7 @@ return :decoded email and info
 //   }
 // );
 
-connection.mongodb();
+//connection.mongodb();
 //
 app.post("/userCreate", async (req, res) => {
   try {

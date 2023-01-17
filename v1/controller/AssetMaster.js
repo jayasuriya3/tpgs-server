@@ -1,5 +1,5 @@
 const Model = require("../../model/index");
-const User = require("../../models").User;
+const User = require("../../models").user;
 const Service = require("../../models").Service;
 const Accessory = require("../../models").Accessory;
 const Device = require("../../models").Device;
@@ -1277,8 +1277,13 @@ module.exports.assetMasterRole = async (req, res) => {
     const user = await User.findOne({
       where: { email: requesterMail },
 
-      attributes: { exclude: ["password"] },
+      attributes: { exclude: ["password"] ,
+      
+    }
+    
+    ,
     });
+    console.log("user",user)
 
     // if (requesterAccount.role === "supervisor") {
 
