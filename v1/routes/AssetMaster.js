@@ -48,9 +48,9 @@ router.post("/AddExcelGeneralDevice",Authenticate.verifyJWT, Controller.AssetMas
 router.patch("/AddExcelServiceDevice/:serviceId/:accessoryId/:vendorId",Authenticate.verifyJWT, Controller.AssetMaster.AddExcelServiceDevice);
 router.post("/addVendor",Authenticate.verifyJWT, Controller.AssetMaster.AddVendor);
 //view device by device vendor
-router.get("/getViewDevice/:vendor/:service/:accessory/:accessoryType/:serviceId/:accessoryId/:vendorId",Authenticate.verifyJWT, Controller.AssetMaster.getViewDevice);
+router.get("/getViewDevice/:vendor/:accessory/:serviceId/:accessoryId/:vendorId",Authenticate.verifyJWT, Controller.AssetMaster.getViewDevice);
 //get defective device
-router.get("/getDefectiveDevice/:vendor/:service/:accessory/:accessoryType/:serviceId/:accessoryId/:vendorId",Authenticate.verifyJWT, Controller.AssetMaster.getDefectiveDevice);
+router.get("/getDefectiveDevice/:vendor/:accessory/:serviceId/:accessoryId/:vendorId",Authenticate.verifyJWT, Controller.AssetMaster.getDefectiveDevice);
 //getallVendor
 router.get("/allVendor", Controller.AssetMaster.AllVendor);
 //all accessory
@@ -121,7 +121,7 @@ router.get("/allDeviceSearch/:serviceId/:accessoryId/:accessory",Authenticate.ve
 router.get("/orderCustomerDetails/:customerId",Authenticate.verifyJWT, Controller.AssetMaster.orderCustomerDetails);
 //get assigned device
 
-router.get("/assignedDevice/:vendor/:service/:accessory/:accessoryType/:serviceId/:accessoryId/:vendorId",Authenticate.verifyJWT, Controller.AssetMaster.assignedDevice);
+router.get("/assignedDevice/:vendor/:accessory/:serviceId/:accessoryId/:vendorId",Authenticate.verifyJWT, Controller.AssetMaster.assignedDevice);
 //postShipping
 router.post("/postShipping",Authenticate.verifyJWT, Controller.AssetMaster.postShipping);
 //close order
