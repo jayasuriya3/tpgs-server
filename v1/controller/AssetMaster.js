@@ -2021,6 +2021,51 @@ module.exports.getViewDevice = async (req, res, next) => {
     console.log(error);
   }
 };
+
+module.exports.getAllViewDevice = async (req, res, next) => {
+  try {
+    console.log("req,body",req.body)
+    
+   if(req.params.accessory=="Mobile"){
+    const device = await Device.findAll({
+      where: {
+      //  vendor: req.params.vendor,
+      // service: req.params.service,
+        accessory: req.params.accessory,
+      // accessoryType: req.params.accessoryType,
+        deviceStatus:{[Op.or]:["Working",null]}
+      },
+      order: [['deviceId', 'ASC']]
+
+    });
+    console.log("device",device)
+ return   res.send(device);
+
+  }
+  else{
+    const device = await Device.findAll({
+      where: {
+    //    vendorId: req.params.vendorId,
+       serviceId: req.params.serviceId,
+        accessoryId: req.params.accessoryId,
+    //   accessoryType: req.params.accessoryType,
+        deviceStatus:{[Op.or]:["Working",null]}
+      },
+      order: [['deviceId', 'ASC']]
+
+    });
+    console.log("device",device)
+
+  return  res.send(device);
+
+  }
+
+  } catch (error) {
+    return next({ status: 404, message: error });
+    res.status(400).send(error);
+    console.log(error);
+  }
+};
 module.exports.getMinMaxYear = async (req, res, next) => {
   try {
     const minYear = await Order.min('createdAt');

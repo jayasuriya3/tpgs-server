@@ -49,6 +49,7 @@ router.patch("/AddExcelServiceDevice/:serviceId/:accessoryId/:vendorId",Authenti
 router.post("/addVendor",Authenticate.verifyJWT, Controller.AssetMaster.AddVendor);
 //view device by device vendor
 router.get("/getViewDevice/:vendor/:accessory/:serviceId/:accessoryId/:vendorId",Authenticate.verifyJWT, Controller.AssetMaster.getViewDevice);
+router.get("/getAllViewDevice/:accessory/:serviceId/:accessoryId",Authenticate.verifyJWT, Controller.AssetMaster.getAllViewDevice);
 //get defective device
 router.get("/getDefectiveDevice/:vendor/:accessory/:serviceId/:accessoryId/:vendorId",Authenticate.verifyJWT, Controller.AssetMaster.getDefectiveDevice);
 //getallVendor
