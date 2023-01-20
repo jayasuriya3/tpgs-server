@@ -1225,11 +1225,13 @@ module.exports.receiptEntryReturn = async (req, res, next) => {
         {
           model:Logistic,
         where:{
-          returnStatus:req.params.returnStatus
+          returnStatus:req.params.returnStatus,
+          shippingStatus:req.params.shippingStatus
         }
       }
       ]
     });
+    console.log("Kit",kit)
   
     res.send(kit);
   
