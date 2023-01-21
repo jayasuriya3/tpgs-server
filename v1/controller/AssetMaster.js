@@ -2546,12 +2546,16 @@ if(req.params.accessory=="Mobile"){
 else{
 const device=await Device.findAll({
   include:[{
-    model:Service
-  },
-{
-  model:Accessory
-},{
-model:Vendor
+//     model:Service
+//   },
+// {
+//   model:Accessory
+// },
+
+// {
+model:Vendor,
+attributes:['id','vendorName']
+
 }
 ] ,
       where: {
