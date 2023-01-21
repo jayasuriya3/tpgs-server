@@ -2051,6 +2051,21 @@ module.exports.getAllViewDevice = async (req, res, next) => {
     //   accessoryType: req.params.accessoryType,
         deviceStatus:{[Op.or]:["Working",null]}
       },
+      include:[
+        {
+ model:Service,
+// attribute:['service']
+        },
+        {
+          model:Vendor,
+      //    attribute:['vendorName']
+
+        },
+        {
+          model:Accessory,
+         // attribute
+        }
+      ],
       order: [['deviceId', 'ASC']]
 
     });
@@ -2545,14 +2560,16 @@ model:Vendor
         deviceStatus:{[Op.or]:[null,"Working"]}
 
       },
-      group: ["vendor", "vendorId","Vendor.id", "Device.serviceId","Service.id","Accessory.id"],
+      group: ["vendor", "vendorId","Vendor.id"],
       attributes: [
         "vendorId",
-        "vendor",
-        "serviceId",
+      //  "serviceId",
         [sequelize.fn("COUNT", sequelize.col("vendorId")), "count"],
-        
+        [  sequelize.fn("MIN", sequelize.fn("COALESCE", sequelize.col("Device.vendor"), sequelize.col("Vendor.vendorName"))),
+        "vendor"
       ],
+      ],
+     
       order: [[Sequelize.literal("count"), "DESC"]],
     })
     
