@@ -1,8 +1,8 @@
 {
   "development": {
     "username": "postgres",
-    "password": "yashvi123",
-    "database": "hospital",
+    "password": "password",
+    "database": "pulse-gate-suite",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
@@ -18,7 +18,7 @@
     "dialect": "postgres",
     "dialectOptions": {
        "ssl": {
-         "require": false,
+         "require": true,
          "rejectUnauthorized": false
        }
      }

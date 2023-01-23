@@ -1,5 +1,5 @@
 module.exports = app => {
-     const practices = require("../controllers/practice.controller.js");
+     const practices = require("../controllers/practice.controller");
      var router = require("express").Router();
 
      router.get("/practice", practices.getAllData);

@@ -50,7 +50,7 @@ db.sequelize = sequelize;
       db.AccessoryOrder.belongsTo(db.Vendor, { foreignKey: 'vendorId' })
       db.Vendor.hasMany(db.AccessoryOrder, { foreignKey: 'vendorId' })
       db.Device.belongsTo(db.Order, { foreignKey: 'orderId' })
-      db.AccessoryOrder.belongsTo(db.Order, { foreignKey: 'orderId' })
+    //  db.AccessoryOrder.belongsTo(db.Order, { foreignKey: 'orderId' })
       db.Accessory.belongsTo(db.Service, { foreignKey: 'serviceId' })
       db.Order.belongsTo(db.Customer, { foreignKey: 'customerId' })
       db.Device.belongsTo(db.Customer, { foreignKey: 'customerId' })

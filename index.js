@@ -28,7 +28,7 @@ const Joi = require("joi");
 const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 //const logger = require("./logger/logger");
-const connection = require("./common/connection");
+//const connection = require("./common/connection");
 const Model = require("./model/index");
 const winston = require("winston");
 const expressWinston = require("express-winston");
@@ -143,6 +143,8 @@ app.use(
       "https://tpgs.vercel.app",
       "https://tpgs-git-develop-faisalmahamudcs.vercel.app",
       "https://pulse-gate-suites.vercel.app",
+      "https://tpgs-mono-git-develop-faisalmahamudcs.vercel.app",
+      "https://tpgs-mono.vercel.app",
 
       "*",
     ],
@@ -231,7 +233,7 @@ return :decoded email and info
 //   }
 // );
 
-connection.mongodb();
+//connection.mongodb();
 //
 app.post("/userCreate", async (req, res) => {
   try {
@@ -589,7 +591,10 @@ const io = new Server(server, {
       "https://asset-master-psi.vercel.app",
       "https://device-logistic.vercel.app",
       "https://device-logistic-git-develop-faisalmahamudcs.vercel.app",
+      "https://tpgs-mono.vercel.app",
       "*",
+      "https://tpgs-mono-git-develop-faisalmahamudcs.vercel.app"
+
     ],
     methods: ["GET", "POST"],
   },

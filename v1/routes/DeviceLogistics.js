@@ -36,7 +36,8 @@ router.post("/addKit", Controller.DeviceLogistics.AddKit);
 //add all searched accessory kit
 router.patch("/AddAccessoryKit/:kitId", Controller.DeviceLogistics.AddAccessoryKit);
 //kit accessory details
-router.post("/viewKitAccessoryDetail", Controller.DeviceLogistics.viewKitAccessoryDetail);
+router.get("/viewKitAccessoryDetail/:kitId", Controller.DeviceLogistics.viewKitAccessoryDetail);
+router.get("/viewKitAccessoryDetailCompleted/:kitId", Controller.DeviceLogistics.viewKitAccessoryDetailCompleted);
 //update assign kit
 router.post("/AssignKit", Controller.DeviceLogistics.AssignKit);
 //Reassign Kit
@@ -81,6 +82,7 @@ router.get("/viewKitAccessoriesDeviceDetail/:deviceId", Controller.DeviceLogisti
 router.get("/shippedTracking/:shippingStatus", Controller.DeviceLogistics.shippedTracking);
 
 router.get("/qualityCheckDevice/:receiveStatus", Controller.DeviceLogistics.qualityCheckDevice);
+router.get("/getLogisticMinMaxYear", Controller.DeviceLogistics.getLogisticMinMaxYear);
 
 router.get("/receiptEntryReturn/:shippingStatus/:returnStatus", Controller.DeviceLogistics.receiptEntryReturn);
 

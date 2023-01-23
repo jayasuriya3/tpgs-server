@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     username: {
       type: DataTypes.STRING,
-      allowNull: false,
+     // allowNull: false,
       unique: {
         args: true,
         msg: 'Username already in use!'
@@ -35,11 +35,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false,
+    //  allowNull: false,
     },
     role: {
       type: DataTypes.STRING,
-      allowNull: false,
+   //   allowNull: false,
     },
     photo: DataTypes.STRING,
     user_type: {
@@ -56,15 +56,15 @@ module.exports = (sequelize, DataTypes) => {
     },
     name: {
       type: DataTypes.STRING,
-      allowNull: false,
+    //  allowNull: false,
     },
     contact_person: {
       type: DataTypes.STRING,
-      allowNull: false,
+     // allowNull: false,
     },
     contact_number: {
       type: DataTypes.STRING,
-      allowNull: false,
+    //  allowNull: false,
       unique: {
         args: true,
         msg: 'Contact Number already in use!'
@@ -72,7 +72,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     location: {
       type: DataTypes.STRING,
-      allowNull: false,
+   //   allowNull: false,
     },
     qualification: {
       type: DataTypes.STRING,
@@ -118,20 +118,20 @@ module.exports = (sequelize, DataTypes) => {
     },
     created_by: {
       type: DataTypes.STRING,
-      allowNull: false,
+    //  allowNull: false,
     },
     modified_by: {
       type: DataTypes.STRING,
-      allowNull: false,
+    //  allowNull: false,
     },
     createdAt: {
       type: DataTypes.DATE,
       field: 'created_at',
-      allowNull: false,
+     // allowNull: false,
     },
     updatedAt: {
       type: DataTypes.DATE,
-      allowNull: false,
+     // allowNull: false,
       field: 'updated_at',
     }
   }, {

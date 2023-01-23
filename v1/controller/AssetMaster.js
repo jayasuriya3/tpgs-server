@@ -1,5 +1,5 @@
 const Model = require("../../model/index");
-const User = require("../../models").User;
+const User = require("../../models").user;
 const Service = require("../../models").Service;
 const Accessory = require("../../models").Accessory;
 const Device = require("../../models").Device;
@@ -25,13 +25,9 @@ module.exports.AssetMasterRegister = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     //console.log(req.body)
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
-    const user = await User.create({
-      name: req.body.name,
-      email: req.body.email,
-      password: hashedPassword,
-      role: req.body.role,
-      photo: req.body.photo,
-    });
+    const user = await User.create(
+      req.body
+    );
     const result = await user.save();
     const { password, ...data } = await user.toJSON();
     res.send(user);
@@ -66,12 +62,13 @@ module.exports.AssetMasterLogin = async (req, res) => {
         expiresIn: "1d",
       }
     );
-    const { role } = user;
+    const { role,name } = user;
     console.log(role);
     // })
     res.send({
       token,
       role,
+      name
     });
   } catch (error) {
     console.log(error);
@@ -781,8 +778,11 @@ console.log("deleted Accessoory ",orderAccessory)
 };
 
 module.exports.countDevice = async (req, res) => {
+
+
   try {
-  const kits= await Device.findAll({
+    console.time("blocking")
+  const kits=  Device.findAll({
       attributes: { 
           include: [[Sequelize.fn("COUNT", Sequelize.col("Accessory.id")), "sensorCount"]] 
       },
@@ -809,7 +809,7 @@ module.exports.countDevice = async (req, res) => {
 // })
    
 //console.log("customer",kit)
-const vendor=await Vendor.count({
+const vendor=Vendor.count({
   where: {
     createdAt: {
       [Op.gte]: new Date(req.params.startDate),
@@ -817,7 +817,7 @@ const vendor=await Vendor.count({
     }       }
 
 })
-const allOrder=await Order.count({
+const allOrder= Order.count({
   where: {
     createdAt: {
       [Op.gte]: new Date(req.params.startDate),
@@ -825,7 +825,7 @@ const allOrder=await Order.count({
     }       }
 
 })
-const ClosedOrderCount = await Order.count({
+const ClosedOrderCount =  Order.count({
      
   include:[{
     model:OrderShipping,
@@ -841,7 +841,7 @@ const ClosedOrderCount = await Order.count({
   }],
 
 }) 
-const OpenOrder =await  Order.count({
+const OpenOrder = Order.count({
 
   where:{
     shippingStatus:{[Op.or]:['Ready To Ship','Shipped','In Transit',null]},
@@ -853,7 +853,12 @@ const OpenOrder =await  Order.count({
 
   }
 }) 
-res.status(200).json({deviceCount:kits.length,vendorCount:vendor,allOrder:allOrder,OpenOrder:OpenOrder,ClosedOrderCount:ClosedOrderCount})
+const [promiseResult1, promiseResult2, promiseResult3,promise4,promise5] = await Promise.all([kits, vendor, allOrder,OpenOrder,
+  ClosedOrderCount
+]);
+console.timeEnd('blocking');
+
+res.status(200).json({deviceCount:promiseResult1.length,vendorCount:promiseResult2,allOrder:promiseResult3,OpenOrder:promise4,ClosedOrderCount:promise5})
   } catch (error) {
     res.status(400).send(error);
     console.log(error);
@@ -876,6 +881,8 @@ res.status(200).json({vendorCount:vendor})
 };
 module.exports.ClosedOrderCount = async (req, res) => {
   try {
+    console.time('non blocking');
+
     const order =  Order.count({
      
       include:[{
@@ -888,6 +895,8 @@ module.exports.ClosedOrderCount = async (req, res) => {
 
     })  .then((result) => {
    //   console.log("result  from order", result);
+   console.timeEnd('non blocking');
+
       res.json({closedCount:result});
     })
     .catch((error) => {
@@ -907,16 +916,7 @@ module.exports.OrderSummary = async (req, res,next) => {
     
 
       }],
-      // where:{
-      //   [Op.and]: [
-      //   Sequelize.where(sequelize.fn('YEAR', sequelize.col('Order.createdAt')), 2022)
-
-      // //    [sequelize.cast(sequelize.col('Order.createdAt'), 'String'), 'createdDate'],
-      //   //  [sequelize.cast(sequelize.col('Order.CreatedAt'), 'String'), 'updatedDate'],
-      
-      //  //   Sequelize.where(Sequelize.cast(Sequelize.fn('DATE_TRUNC','month'), Sequelize.col('Order.createdAt')),  new Date().getMonth()),
-      //    // Sequelize.where(Sequelize.cast(Sequelize.fn('DATE_TRUNC','year'), Sequelize.col('Order.createdAt')),  new Date().getFullYear()),
-      // ]      }
+    
 
       
         where: {
@@ -978,8 +978,10 @@ else{
 }
 module.exports.deviceAnalysis = async (req,res,next) => {
   try {
-    console.log("device Analysis params",req.params.startDate,req.params.endDate)
-  const deviceAnalysis= await Device.findAll({
+    console.time('blocking of deviceAnalysis');
+  //  deviceAnalysis api
+     console.log("device Analysis params",req.params.startDate,req.params.endDate)
+  const deviceAnalysis=  Device.findAll({
     group:["Service.service","serviceId","Service.id"],
     attributes: [
       [Sequelize.fn('COUNT', Sequelize.col('serviceId')), 'deviceCount'],
@@ -991,11 +993,167 @@ module.exports.deviceAnalysis = async (req,res,next) => {
       }   
     },
     include:[{
-      model:Service
+      model:Service,
+      attributes:['service']
     }]
   })
+
+  
   console.log('order trend',deviceAnalysis)
-  res.send(deviceAnalysis)
+ // deviceStatusAnalysis api
+  const device =  Device.count({
+    where: {
+    
+      deviceStatus:{[Op.or]:[null,"Working"]},
+      // createdAt: {
+      //    [Op.gte]: new Date(req.params.startDate),
+      // [Op.lt]: new Date(req.params.endDate)
+      // }
+
+
+    },
+  });
+ 
+  const assignedDevice =  Device.count({
+    where: {
+    
+      deviceStatus:"Assigned",
+      createdAt: {
+      [Op.gte]: new Date(req.params.startDate),
+      [Op.lt]: new Date(req.params.endDate)
+      }
+
+    },
+  });
+ 
+  const defective =  Device.count({
+    where: {
+    
+      deviceStatus:{[Op.or]:["Defective","Missing","Damaged"]},
+      
+      createdAt: {
+      [Op.gte]: new Date(req.params.startDate),
+      [Op.lt]: new Date(req.params.endDate)
+      }
+
+    },
+  });
+
+
+ // res.status(200).json({availableCount:device,assignedCount:assignedDevice,defective:defective});
+
+
+  //res.send(deviceAnalysis)
+// count device api
+const kits=  Device.findAll({
+  attributes: { 
+      include: [[Sequelize.fn("COUNT", Sequelize.col("Accessory.id")), "sensorCount"]] 
+  },
+  include: [{
+      model: Accessory, attributes: [],
+      where:{
+        accessoryType:"Sensor",
+        createdAt: {
+                [Op.gte]: new Date(req.params.startDate),
+                [Op.lt]: new Date(req.params.endDate)
+              } ,
+      }
+  }],
+  group: ['Accessory.id',"Device.id"]
+});
+// const kit=await Device.count({
+
+//   where: {
+//     createdAt: {
+//       [Op.gte]: new Date(req.params.startDate),
+//       [Op.lt]: new Date(req.params.endDate)
+//     }       }
+
+// })
+
+//console.log("customer",kit)
+const vendor=Vendor.count({
+where: {
+createdAt: {
+  [Op.gte]: new Date(req.params.startDate),
+  [Op.lt]: new Date(req.params.endDate)
+}       }
+
+})
+const allOrder= Order.count({
+where: {
+createdAt: {
+  [Op.gte]: new Date(req.params.startDate),
+  [Op.lt]: new Date(req.params.endDate)
+}       }
+
+})
+const ClosedOrderCount =  Order.count({
+ 
+include:[{
+model:OrderShipping,
+
+where:{
+  shippingStatus:{[Op.or]:['Received By Customer','Returned','Partially Returned','Received By Organization']},
+    createdAt: {
+      [Op.gte]: new Date(req.params.startDate),
+      [Op.lt]: new Date(req.params.endDate)
+    }       
+
+}
+}],
+
+}) 
+const OpenOrder = Order.count({
+
+where:{
+shippingStatus:{[Op.or]:['Ready To Ship','Shipped','In Transit',null]},
+createdAt: {
+  [Op.gte]: new Date(req.params.startDate),
+  [Op.lt]: new Date(req.params.endDate)
+}       
+
+
+}
+}) 
+
+// order summary  api
+//promise done
+const orderSummary =  Order.findAll({
+     
+  include:[{
+    model:OrderShipping,
+
+
+  }],
+
+
+  
+    where: {
+      createdAt: {
+        [Op.gte]: new Date(req.params.startDate),
+        [Op.lt]: new Date(req.params.endDate)
+      }       }
+  
+})  
+
+const [promiseResult1, promiseResult2, promiseResult3,promise4,promise5,orderSummarypromise,devicePromise,assignedDevicePromise,defectivePromise,
+deviceAnalysisPromise
+] = await Promise.all([kits, vendor, allOrder,OpenOrder,
+  ClosedOrderCount,orderSummary,device,assignedDevice,
+  defective,
+  deviceAnalysis
+  ]);
+  console.timeEnd('blocking');
+  
+  res.status(200).json({deviceCount:promiseResult1.length,vendorCount:promiseResult2,allOrder:promiseResult3,OpenOrder:promise4,ClosedOrderCount:promise5,orderSummary:orderSummarypromise,device:devicePromise,assignedDevice:assignedDevicePromise,defective:defectivePromise,deviceAnalysis:deviceAnalysisPromise
+  
+  })
+
+//order trend api
+console.timeEnd("blocking of deviceAnalysis")
+
+
 } catch (error) {
   return next({ status: 404, message: error });
   console.log(error);
@@ -1040,6 +1198,9 @@ module.exports.orderDetails = async (req, res,next) => {
       .catch((error) => {
         return next({ status: 404, message: error });
       });
+    //order summary
+    
+    
 
   } catch (error) {
     res.status(400).send(error);
@@ -1116,8 +1277,13 @@ module.exports.assetMasterRole = async (req, res) => {
     const user = await User.findOne({
       where: { email: requesterMail },
 
-      attributes: { exclude: ["password"] },
+      attributes: { exclude: ["password"] ,
+      
+    }
+    
+    ,
     });
+    console.log("user",user)
 
     // if (requesterAccount.role === "supervisor") {
 
@@ -1493,16 +1659,18 @@ module.exports.getCountDevice = async (req, res, next) => {
   }
 };
 module.exports.getDeviceStatusAnalysis = async (req, res, next) => {
+
+
   try {
    
     const device = await Device.count({
       where: {
       
         deviceStatus:{[Op.or]:[null,"Working"]},
-        createdAt: {
-           [Op.gte]: new Date(req.params.startDate),
-        [Op.lt]: new Date(req.params.endDate)
-        }
+        // createdAt: {
+        //    [Op.gte]: new Date(req.params.startDate),
+        // [Op.lt]: new Date(req.params.endDate)
+        // }
 
 
       },
@@ -1523,7 +1691,8 @@ module.exports.getDeviceStatusAnalysis = async (req, res, next) => {
     const defective = await Device.count({
       where: {
       
-        deviceStatus:"Defective",
+        deviceStatus:{[Op.or]:["Defective","Missing","Damaged"]},
+        
         createdAt: {
         [Op.gte]: new Date(req.params.startDate),
         [Op.lt]: new Date(req.params.endDate)
@@ -1811,6 +1980,7 @@ module.exports.getAssignAccessoryInfoDevice = async (req, res, next) => {
 module.exports.getViewDevice = async (req, res, next) => {
   try {
     console.log("req,body",req.body)
+    
    if(req.params.accessory=="Mobile"){
     const device = await Device.findAll({
       where: {
@@ -1842,6 +2012,66 @@ module.exports.getViewDevice = async (req, res, next) => {
     console.log("device",device)
 
     res.send(device);
+
+  }
+
+  } catch (error) {
+    return next({ status: 404, message: error });
+    res.status(400).send(error);
+    console.log(error);
+  }
+};
+
+module.exports.getAllViewDevice = async (req, res, next) => {
+  try {
+    console.log("req,body",req.body)
+    
+   if(req.params.accessory=="Mobile"){
+    const device = await Device.findAll({
+      where: {
+      //  vendor: req.params.vendor,
+      // service: req.params.service,
+        accessory: req.params.accessory,
+      // accessoryType: req.params.accessoryType,
+        deviceStatus:{[Op.or]:["Working",null]}
+      },
+      order: [['deviceId', 'ASC']]
+
+    });
+    console.log("device",device)
+ return   res.send(device);
+
+  }
+  else{
+    const device = await Device.findAll({
+      where: {
+    //    vendorId: req.params.vendorId,
+       serviceId: req.params.serviceId,
+        accessoryId: req.params.accessoryId,
+    //   accessoryType: req.params.accessoryType,
+        deviceStatus:{[Op.or]:["Working",null]}
+      },
+      include:[
+        {
+ model:Service,
+// attribute:['service']
+        },
+        {
+          model:Vendor,
+      //    attribute:['vendorName']
+
+        },
+        {
+          model:Accessory,
+         // attribute
+        }
+      ],
+      order: [['deviceId', 'ASC']]
+
+    });
+    console.log("device",device)
+
+  return  res.send(device);
 
   }
 
@@ -2316,12 +2546,16 @@ if(req.params.accessory=="Mobile"){
 else{
 const device=await Device.findAll({
   include:[{
-    model:Service
-  },
-{
-  model:Accessory
-},{
-model:Vendor
+//     model:Service
+//   },
+// {
+//   model:Accessory
+// },
+
+// {
+model:Vendor,
+attributes:['id','vendorName']
+
 }
 ] ,
       where: {
@@ -2330,14 +2564,16 @@ model:Vendor
         deviceStatus:{[Op.or]:[null,"Working"]}
 
       },
-      group: ["vendor", "vendorId","Vendor.id", "Device.serviceId","Service.id","Accessory.id"],
+      group: ["vendor", "vendorId","Vendor.id"],
       attributes: [
         "vendorId",
-        "vendor",
-        "serviceId",
+      //  "serviceId",
         [sequelize.fn("COUNT", sequelize.col("vendorId")), "count"],
-        
+        [  sequelize.fn("MIN", sequelize.fn("COALESCE", sequelize.col("Device.vendor"), sequelize.col("Vendor.vendorName"))),
+        "vendor"
       ],
+      ],
+     
       order: [[Sequelize.literal("count"), "DESC"]],
     })
     
