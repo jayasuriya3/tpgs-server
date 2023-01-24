@@ -14,6 +14,7 @@ const Patient = require("../../models").Patient;
 const Logistic = require("../../models").Logistic;
 const KitAccessory = require("../../models").KitAccessory;
 const Kit = require("../../models").Kit;
+const moment =require('moment');
 
 const bcrypt = require("bcryptjs");
 const Validation = require("../validations/DeviceLogistics");
@@ -799,19 +800,38 @@ module.exports.viewKitAccessoryDetailById = async (req, res, next) => {
 //assign unassigned kit
 module.exports.AssignedUnassignedPatient = async (req, res, next) => {
   try {
-   
+    const firstDay = moment().startOf('month').format('YYYY-M-DD');
+const lastDay = moment().endOf('month').format('YYYY-M-DD');
+   if(req.params.assignStatus==="Assigned"){
+
+    const patient = await Patient.findAll({
+      where: {
+
+        assignStatus: req.params.assignStatus,
+        updatedAt: {
+          [Op.gte]: new Date(firstDay),
+          [Op.lt]: new Date(lastDay)
+        } ,
+      },
+      order: [['updatedAt', 'DESC']],
+
+
+
+    });
+  
+    res.send(patient);
+  }
+   else if(req.params.assignStatus==="UnAssigned"){
     const patient = await Patient.findAll({
       where: {
 
         assignStatus: req.params.assignStatus
       },
     });
-    //const {rows,count}=device;
-    //console.log(rows,count,deviceGroup)
+  
     res.send(patient);
-    // const vendor =await  Vendor.findAll();
-
-    // res.send(device);
+  }
+   
   } catch (error) {
     return next({ status: 404, message: error });
     res.status(400).send(error);

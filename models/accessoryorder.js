@@ -57,6 +57,8 @@ module.exports = (sequelize, DataTypes) => {
     statusCheck: DataTypes.STRING,
     kitId: DataTypes.STRING,
     deviceStatusComment: DataTypes.STRING,
+    comment:DataTypes.STRING,
+
     customerName:DataTypes.STRING,
   createdBy:DataTypes.STRING,
   editedBy:DataTypes.STRING,
