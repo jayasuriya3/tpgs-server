@@ -1041,8 +1041,10 @@ module.exports.AssignedDispatchKit = async (req, res, next) => {
          shippingStatus:{[Op.or]:['Ready To Ship','Delivered','In Transit',null]}
 
        
-       // shippingStatus:{[Op.not]:'Shipped'}
-        }      
+        }  ,
+        include:[{
+          model:Patient
+        }]    
       
 
     });
