@@ -210,7 +210,7 @@ exports.getAllData = (req, res) => {
 	const { userType, status, practiceAdminId } = req.query;
 	console.log({ userType });
 	User.findAll({
-		order: [["updated_at", "DESC"]],
+		order: [["created_at", "DESC"]],
 		where: {
 			...(userType
 				? {
