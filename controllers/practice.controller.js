@@ -178,11 +178,22 @@ exports.filter = (req, res) => {
 
 exports.upload = (req, res) => {
 	const newpath = path.dirname(path.basename(__dirname)) + "/uploads/logo/";
+	console.log("newpath", newpath)
+	console.log("req.files", req.files)
 	const file = req.files.file;
+	if (!file){
+		var response = {
+			status: "error",
+			message: "File not found"
+		};
+		return res.status(400).send(response);
+	}
 	const filename = Math.floor(Date.now() / 1000) + path.extname(file.name);
+	console.log(newpath+filename)
 
 	file.mv(`${newpath}${filename}`, (err) => {
 		if (err) {
+			console.log(err)
 			res.status(500).send({ message: "File upload failed", code: 200 });
 		} else {
 			var response = {
