@@ -9,6 +9,7 @@ const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const jwt = require("jsonwebtoken");
 const app = express();
 const { handleErrors } = require("./middlewares/handleErrors");
+const fileupload = require("express-fileupload");
 // const handleRequest=require('./middlewares/index')
 //const User = require('./models/user')
 
@@ -116,6 +117,8 @@ const handleRequest = async (req, res, next) => {
 };
 const expressJson = express.json(); 
 const bodyParser  = express.urlencoded({extended: true}); 
+app.use(fileupload());
+app.use('/uploads', express.static('uploads'));
 app.use([expressJson, bodyParser])
 app.use(handleRequest);
 app.use(infoLogger);
@@ -726,13 +729,10 @@ startTime=date
 });
 app.use((err,req,res,next)=>{
   console.log(err)
-  logger.error(err)
   console.error(err.stack)
 })
 // run().catch(console.dir);
 app.get("/", (req, res) => {
-  logger.log("debug", "Hello, Winston!");
-  logger.debug("The is the home '/' route.");
   res.send("Velozity App");
 });
 
