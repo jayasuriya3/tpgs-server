@@ -1376,6 +1376,7 @@ const  deviceUpdate=await Device.update({
   deviceStatus:req.body.deviceStatus,
   deviceStatusComment:req.body.deviceStatusComment,
   statusCheck:"Completed",
+  editedBy:req.body.editedBy,
   deviceStatusUpdateDate:new Date()
 },
 {
