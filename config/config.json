@@ -1,8 +1,9 @@
+
 {
   "development": {
     "username": "postgres",
-    "password": "yashvi123",
-    "database": "hospital",
+    "password": "password",
+    "database": "pulse-gate-suite",
     "host": "localhost",
     "dialect": "postgres"
   },

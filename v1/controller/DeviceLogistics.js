@@ -1038,7 +1038,7 @@ module.exports.AssignedDispatchKit = async (req, res, next) => {
       where: {
 
          assignStatus: req.params.assignStatus,
-         shippingStatus:{[Op.or]:['Ready To Ship','Delivered','In Transit',null]}
+         shippingStatus:{[Op.or]:["Ready to Ship","Delivered","In Transit",null]}
 
        
         }  ,
