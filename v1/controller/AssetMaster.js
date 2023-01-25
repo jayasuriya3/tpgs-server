@@ -2647,6 +2647,7 @@ module.exports.DeviceGroupList = async (req, res, next) => {
     [  sequelize.fn("MIN", sequelize.fn("COALESCE", sequelize.col("Device.vendor"), sequelize.col("Vendor.vendorName"))),
       "vendor"
     ],
+    
       
      
       ],

@@ -968,14 +968,30 @@ module.exports.qualityCheckDevice = async (req, res, next) => {
       },
       include:[{
         model: Service,
+        attributes:["service"]
        // required: true // this will inner join the Service model
       }, {
         model: Accessory,
+        attributes:["accessory"]
+
       //  required: true // this will inner join the Accessory model
       }, {
         model: Vendor,
+       attributes:["vendorName"]
+
        // required: true // this will inner join the Vendor model
-      }] 
+      }] ,
+      attributes: [[   sequelize.fn("COALESCE", sequelize.col("Device.accessory"), sequelize.col("Accessory.accessory")),
+      "accessory"
+    ],
+    [   sequelize.fn("COALESCE", sequelize.col("Service.service")),
+      "service"
+    ],
+    [   sequelize.fn("COALESCE", sequelize.col("Device.vendor"), sequelize.col("Vendor.vendorName")),
+    "vendor"
+  ],"deviceId","deviceModel","warrantyTime","warranty","purchaseDate","expiryDate","kitId","updatedAt","editedBy"
+  ]
+
      
     });
     //const {rows,count}=device;
