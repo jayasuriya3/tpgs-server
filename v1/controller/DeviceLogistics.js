@@ -868,6 +868,8 @@ module.exports.incompleteDeviceRefurnish = async (req, res, next) => {
   }
 };
 module.exports.logisticHistories = async (req, res, next) => {
+  const firstDay = moment().startOf('month').format('YYYY-M-DD');
+const lastDay = moment().endOf('month').format('YYYY-M-DD');
   try {
    
     const patient = await Kit.findAll({
@@ -883,8 +885,12 @@ module.exports.logisticHistories = async (req, res, next) => {
           [Op.or]:["Shipped","In Transit","Delivered","Received By Patient"]  
           
         },
-      
-      }
+        updatedAt: {
+          [Op.gte]: new Date(firstDay),
+          [Op.lt]: new Date(lastDay)
+        } ,
+      },
+
 
     }
     
