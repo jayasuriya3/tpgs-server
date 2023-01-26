@@ -186,7 +186,29 @@ module.exports.allUnassignedKit = async (req, res) => {
     const kit = await Kit.findAll({
       where:{
         assignStatus:"UnAssigned",
-      }
+      },
+      include:[
+    {
+      model:Device,
+      include:[{
+        model:Service,
+        attributes:['service']
+      },
+      {
+    model:Accessory,
+    attributes:['accessory']
+
+      },
+      {
+        model:Vendor,
+        attributes:['vendorName']
+
+          },
+
+  ]
+    }
+    ]      
+
     });
     console.log("kit",kit)
 
@@ -1124,13 +1146,18 @@ module.exports.AssignedKitList = async (req, res, next) => {
       {
         model:Device,
         include:[{
-          model:Service
+          model:Service,
+          attributes:['service']
         },
         {
-      model:Accessory
+      model:Accessory,
+      attributes:['accessory']
+
         },
         {
-          model:Vendor
+          model:Vendor,
+          attributes:['vendorName']
+
             },
 
     ]
