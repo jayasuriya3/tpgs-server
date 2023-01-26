@@ -1402,6 +1402,25 @@ module.exports.receiptEntryReturn = async (req, res, next) => {
           returnStatus:req.params.returnStatus,
           shippingStatus:req.params.shippingStatus
         }
+      },
+      {
+        model:Device,
+        include:[{
+          model:Service,
+          attributes:['service']
+        },
+        {
+      model:Accessory,
+      attributes:['accessory']
+
+        },
+        {
+          model:Vendor,
+          attributes:['vendorName']
+
+            },
+
+    ]
       }
       ]
     });
