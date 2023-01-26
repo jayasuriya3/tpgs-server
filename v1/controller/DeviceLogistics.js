@@ -1107,6 +1107,50 @@ module.exports.AssignedKit = async (req, res, next) => {
     console.log(error);
   }
 };
+module.exports.AssignedKitList = async (req, res, next) => {
+  try {
+   
+    const kit = await Kit.findAll({
+      where: {
+
+         assignStatus: req.params.assignStatus,
+
+
+       //   shippingStatus:{[Op.not]:['Shipped']}
+        },
+        include:[{
+          model:Patient
+        },
+      {
+        model:Device,
+        include:[{
+          model:Service
+        },
+        {
+      model:Accessory
+        },
+        {
+          model:Vendor
+            },
+
+    ]
+      }
+      ]      
+      
+
+    });
+    //const {rows,count}=device;
+    //console.log(rows,count,deviceGroup)
+    res.send(kit);
+    // const vendor =await  Vendor.findAll();
+
+    // res.send(device);
+  } catch (error) {
+    return next({ status: 404, message: error });
+    res.status(400).send(error);
+    console.log(error);
+  }
+};
 //viewKitAccessoriesDetail by kit id
 module.exports.viewKitAccessoriesDetail = async (req, res, next) => {
   try {
@@ -1126,6 +1170,9 @@ module.exports.viewKitAccessoriesDetail = async (req, res, next) => {
     console.log(error);
   }
 };
+
+
+
 module.exports.viewKitAccessoriesDeviceDetail = async (req, res, next) => {
   try {
    
