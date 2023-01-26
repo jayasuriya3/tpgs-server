@@ -894,10 +894,31 @@ module.exports.incompleteDeviceRefurnish = async (req, res, next) => {
           [Op.is]:false
         }
       },
-      include:{all:true}
-      // include:[{
-      //   model:Patient
-      // }]
+     // include:{all:true}
+      include:[{
+        model:Patient
+      }, 
+    {
+      model:Logistic
+
+    },
+    {
+      model:Device,
+      include:[{
+        model:Service,
+        attributes:["service"]
+      },
+    {
+      model:Accessory,
+      attributes:["accessory"]
+    },
+    {
+      model:Vendor,
+      attributes:["vendorName"]
+    }
+    ]
+    }
+    ]
     });
     //const {rows,count}=device;
     //console.log(rows,count,deviceGroup)
