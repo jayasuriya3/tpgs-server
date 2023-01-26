@@ -834,7 +834,29 @@ const lastDay = moment().endOf('month').format('YYYY-M-DD');
           [Op.gte]: new Date(firstDay),
           [Op.lt]: new Date(lastDay)
         } ,
+
       },
+      include:[{
+        model:Kit,
+        include:[{
+          model:Device,
+          include:[{
+            model: Service,
+            attribute:['service']
+           // required: true // this will inner join the Service model
+          }, {
+            model: Accessory,
+            attribute:['accessory']
+          //  required: true // this will inner join the Accessory model
+          }, {
+            model: Vendor,
+            attribute:['vendorName']
+           // required: true // this will inner join the Vendor model
+          },
+       
+        ]
+        }]
+      }],
       order: [['updatedAt', 'DESC']],
 
 
