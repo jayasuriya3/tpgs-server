@@ -1082,8 +1082,21 @@ module.exports.completedDevice = async (req, res, next) => {
     ,
       include:[{
         model:Device,
-       
-      
+        include:[{
+          model: Service,
+          attributes:["service"]
+         // required: true // this will inner join the Service model
+        }, {
+          model: Accessory,
+          attributes:["accessory"]
+  
+        //  required: true // this will inner join the Accessory model
+        }, {
+          model: Vendor,
+         attributes:["vendorName"]
+  
+         // required: true // this will inner join the Vendor model
+        }] ,
       where: {
 
        receiveStatus:"Received",
