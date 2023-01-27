@@ -957,6 +957,25 @@ const lastDay = moment().endOf('month').format('YYYY-M-DD');
       },
 
 
+    },
+    {
+      model:Device,
+      include:[{
+        model:Service,
+        attributes:['service']
+      },
+      {
+    model:Accessory,
+    attributes:['accessory']
+
+      },
+      {
+        model:Vendor,
+        attributes:['vendorName']
+
+          },
+
+  ]
     }
     
     ]
