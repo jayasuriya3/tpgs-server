@@ -54,6 +54,7 @@ exports.login = (req, res) => {
 							userId: data[0].dataValues.id,
 							practiceId: data[0].dataValues.practiceId,
 							userName: data[0].dataValues.username,
+							name: data[0].dataValues.name,
 							userEmail: data[0].dataValues.email,
 							isTOTP: !!data[0].dataValues.totpAuthUrl,
 							token: token
