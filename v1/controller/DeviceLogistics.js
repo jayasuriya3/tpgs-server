@@ -462,12 +462,13 @@ const kitSummary= Kit.findAll({
       [Op.gte]: new Date(req.params.startDate),
       [Op.lt]: new Date(req.params.endDate)
     },
+   
+   
+    }     ,
     include:[{
       model:Patient,
       attributes:['patientName','doctorName','hospitalName']
-    }]  
-   
-    }      
+    }]   
   
 
 })
