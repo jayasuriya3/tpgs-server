@@ -446,7 +446,12 @@ where:{
             include:[{
               model:Logistic,
               
-            }]
+            },
+          {
+            model:Patient,
+            attributes:['patientName','hospitalName','doctorName']
+          }
+          ]
           }]
 
       })
