@@ -270,7 +270,7 @@ module.exports.AllAccessoryList = async (req, res) => {
 
     res.send(accessory);
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).send(error.msg);
     console.log(error);
   }
 };
@@ -347,7 +347,12 @@ module.exports.AddGeneralDevice = async (req, res) => {
     });
 
   
-    res.send(device);
+    res.send(
+      {
+        status: "success",
+        message: "A new Device created !",
+      }
+    );
   } catch (error) {
     res.status(400).send(error);
     console.log(error);
@@ -414,10 +419,11 @@ module.exports.AddDevice = async (req, res) => {
       accessoryType:req.body.accessoryType,
       warrantyTime:req.body.warrantyTime
     });
-    //const result = await accessory.save();
-    console.log("results", device);
-    //  const { password, ...data } = await user.toJSON();
-    res.send(device);
+   
+    res.send({
+			status: "success",
+			message: "A new Device created !",
+		});
   } catch (error) {   
     res.status(400).send(error);
     console.log(error);
@@ -461,7 +467,10 @@ module.exports.AddAccessoryList = async (req, res,next) => {
   // const accessoryInfo=await  AccessoryInfo.bulkCreate(req.body)
 
  // res.send({accessoryInfo,deviceUpdate});
-  res.send({deviceUpdate});
+  res.send({
+    status: "success",
+    message: " Device created !",
+  });
    
   } catch (error) {
     console.log("error",error)
@@ -495,7 +504,10 @@ module.exports.AddExcelGeneralDevice = async (req, res,next) => {
    
 
    
-    res.send(devices);
+    res.send({
+			status: "success",
+			message: " Device created !",
+		});
   } catch (error) {
     return next({ status: 404, message: error });
 
@@ -541,7 +553,10 @@ module.exports.AddExcelServiceDevice = async (req, res,next) => {
    
 
    
-    res.send(devices);
+    res.send({
+			status: "success",
+			message: " Device created !",
+		});
   } catch (error) {
     return next({ status: 404, message: error });
 
@@ -595,7 +610,10 @@ module.exports.AddVendor = async (req, res) => {
     //const result = await accessory.save();
     //  const { password, ...data } = await user.toJSON();
     console.log(vendor)
-    res.send(vendor);
+    res.send({
+			status: "success",
+			message: "A new Vendor created !",
+		});
   } catch (error) {
     console.log(error)
     res.status(400).send(error);
