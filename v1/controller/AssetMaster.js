@@ -128,7 +128,7 @@ module.exports.AllService = async (req, res) => {
 
     res.send(service);
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).send(error.msg);
     console.log(error);
   }
 };
@@ -153,7 +153,7 @@ module.exports.AllCustomer = async (req, res) => {
 
     res.send(customer);
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).send(error.msg);
     console.log(error);
   }
 };
@@ -226,7 +226,10 @@ console.log(serviceAccessory.length)
     //const result = await accessory.save();
     console.log("results", accessory);
     //  const { password, ...data } = await user.toJSON();
-    res.send(accessory);
+    res.send({
+			status: "success",
+			message: "A new Accessory created !",
+		});
   } catch (error) {
     res.status(400).send(error);
     console.log(error);
