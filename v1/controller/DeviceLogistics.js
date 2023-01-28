@@ -196,7 +196,7 @@ module.exports.allUnassignedKit = async (req, res) => {
       },
       {
     model:Accessory,
-    attributes:['accessory']
+    attributes:['accessory','accessoryType']
 
       },
       {

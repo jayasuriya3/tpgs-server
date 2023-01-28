@@ -674,7 +674,7 @@ module.exports.CloseOrder = async (req, res) => {
       res.send(result);
     })
     .catch((error) => {
-      return next({ status: 404, message: error });
+      return next({ status: 404, message: error.message });
     });
   } catch (error) {
     res.status(400).send(error);
