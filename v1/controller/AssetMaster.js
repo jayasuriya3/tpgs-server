@@ -110,7 +110,10 @@ console.log(existingDevice.length)
     const result = await service.save();
     console.log("results", result);
     //  const { password, ...data } = await user.toJSON();
-    res.send(result);
+    res.send({
+			status: "success",
+			message: "A new Device created !",
+		});
   } catch (error) {
     res.status(400).send(error);
     console.log(error);
