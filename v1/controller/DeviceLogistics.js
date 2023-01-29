@@ -1173,7 +1173,11 @@ module.exports.AssignedDispatchKit = async (req, res, next) => {
         }  ,
         include:[{
           model:Patient
-        }]    
+        },
+      {
+        model:Logistic
+      }
+      ]    
       
 
     });
