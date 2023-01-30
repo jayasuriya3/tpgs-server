@@ -33,17 +33,7 @@ module.exports = (sequelize, DataTypes) => {
     
     contactNumber:DataTypes.STRING,
     address:DataTypes.STRING,
-    logisticName:DataTypes.STRING,
-    shippingStatus:DataTypes.STRING,
-    AWB:DataTypes.STRING,
-    shippingDate:DataTypes.DATE,
-    returnLogisticsName:DataTypes.STRING,
-    returnStatus:DataTypes.STRING,
-    returnAWB:DataTypes.STRING,
-    returnDate:DataTypes.DATE
-
-
-
+    
     
   }, {
     sequelize,
