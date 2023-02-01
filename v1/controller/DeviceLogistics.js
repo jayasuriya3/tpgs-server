@@ -991,7 +991,7 @@ const lastDay = moment().subtract(30, 'days').format('YYYY-M-DD');;
     ],
     // where:{
     // updatedAt: {
-    //   [Op.gte]: firstDay,
+    //   [Op.gte]: firstDay,   
     //   [Op.lt]:lastDay
     // } },
     });
