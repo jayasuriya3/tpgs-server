@@ -20,9 +20,9 @@ module.exports = (sequelize, DataTypes) => {
    // unique:true
     },
     createdBy: DataTypes.STRING,
-    creatorPhoto: DataTypes.STRING,
+    //creatorPhoto: DataTypes.STRING,
     editedBy:DataTypes.STRING,
-    editedByPhoto:DataTypes.STRING,
+  //  editedByPhoto:DataTypes.STRING,
     disable:{
       type:DataTypes.BOOLEAN,
       defaultValue:false
