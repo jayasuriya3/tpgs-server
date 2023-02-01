@@ -1,11 +1,11 @@
 const express = require("express");
 const cors = require("cors");
 //const bcrypt = require('bcryptjs')
-const mongoose = require("mongoose");
+//const mongoose = require("mongoose");
 require("dotenv").config();
 var nodemailer = require("nodemailer");
 const cookieParser = require("cookie-parser");
-const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
+//const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const jwt = require("jsonwebtoken");
 const app = express();
 const { handleErrors } = require("./middlewares/handleErrors");
@@ -13,27 +13,27 @@ const fileupload = require("express-fileupload");
 // const handleRequest=require('./middlewares/index')
 //const User = require('./models/user')
 
-const Arrhythmias = require("./model/arrhythmias");
-const EctopyRoute = require("./routes/Ectopy.route");
-const InterimReportRoute = require("./routes/InterimReport.route");
-const ReferingPhysicianRoute = require("./routes/ReferingPhysician.route");
-const InterpretingPhysician = require("./model/interpretingPhysician");
+//const Arrhythmias = require("./model/arrhythmias");
+//const EctopyRoute = require("./routes/Ectopy.route");
+//const InterimReportRoute = require("./routes/InterimReport.route");
+//const ReferingPhysicianRoute = require("./routes/ReferingPhysician.route");
+//const InterpretingPhysician = require("./model/interpretingPhysician");
 const port = process.env.PORT || 5000;
-const SupervisorQueueRoute = require("./routes/SupervisorQueue.route");
-const ArrhythmiasRoute = require("./routes/Arrhythmias.route");
+//const SupervisorQueueRoute = require("./routes/SupervisorQueue.route");
+//const ArrhythmiasRoute = require("./routes/Arrhythmias.route");
 const v1Routes = require("./v1/routes/index");
 //const User = require("./model/user");
-const Token = require("./model/token");
+//const Token = require("./model/token");
 const sendEmail = require("./utils/sendMail");
 const Joi = require("joi");
 const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 //const logger = require("./logger/logger");
 //const connection = require("./common/connection");
-const Model = require("./model/index");
+//const Model = require("./model/index");
 const winston = require("winston");
 const expressWinston = require("express-winston");
-const winstonMongo = require("winston-mongodb");
+//const winstonMongo = require("winston-mongodb");
 const ElasticsearchTransport = require("winston-elasticsearch");
 require("winston-daily-rotate-file");
 const {performance} = require('perf_hooks');
@@ -363,15 +363,15 @@ table .PatientRoute set /patient to api.
 
 //app.use("/patient", PatientRoute);
 
-app.use("/supervisorQueue", SupervisorQueueRoute);
-//ArrhythmiasRoute
-app.use("/arrhythmias", ArrhythmiasRoute);
-//ectopy post and get
-app.use("/ectopy", EctopyRoute);
-//InterimReport get and post
-app.use("/InterimReport", InterimReportRoute);
-//refering physician get and post
-app.use("/referingPhysician", ReferingPhysicianRoute);
+// app.use("/supervisorQueue", SupervisorQueueRoute);
+// //ArrhythmiasRoute
+// app.use("/arrhythmias", ArrhythmiasRoute);
+// //ectopy post and get
+// app.use("/ectopy", EctopyRoute);
+// //InterimReport get and post
+// app.use("/InterimReport", InterimReportRoute);
+// //refering physician get and post
+// app.use("/referingPhysician", ReferingPhysicianRoute);
 
 //comment patch update for techincian when new comment submitted
 app.patch("/comment", async (req, res) => {

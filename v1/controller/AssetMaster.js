@@ -1,4 +1,4 @@
-const Model = require("../../model/index");
+//const Model = require("../../model/index");
 const User = require("../../models").user;
 const Service = require("../../models").Service;
 const Accessory = require("../../models").Accessory;
