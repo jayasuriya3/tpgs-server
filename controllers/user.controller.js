@@ -241,7 +241,7 @@ exports.getAccessLog = (req, res) => {
 	User.findAll({
 		order: [["updated_at", "DESC"]],
 		where: {
-			ip_address: { [Op.not]: null },
+			// ip_address: { [Op.not]: null },
 			...(userType
 				? {
 					user_type: userType,
