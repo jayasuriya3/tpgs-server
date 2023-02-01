@@ -943,8 +943,11 @@ module.exports.incompleteDeviceRefurnish = async (req, res, next) => {
   }
 };
 module.exports.logisticHistories = async (req, res, next) => {
-  const firstDay = moment().startOf('month').format('YYYY-M-DD');
-const lastDay = moment().endOf('month').format('YYYY-M-DD');
+ // const firstDay = moment().startOf('month').format('YYYY-M-DD');
+//const lastDay = moment().endOf('month').format('YYYY-M-DD');
+const firstDay = moment().format('YYYY-M-DD');
+console.log("firstday",firstDay,new Date())
+const lastDay = moment().subtract(30, 'days').format('YYYY-M-DD');;
   try {
    
     const patient = await Kit.findAll({
@@ -960,10 +963,7 @@ const lastDay = moment().endOf('month').format('YYYY-M-DD');
           [Op.or]:["Shipped","In Transit","Delivered","Received By Patient"]  
           
         },
-        updatedAt: {
-          [Op.gte]: new Date(firstDay),
-          [Op.lt]: new Date(lastDay)
-        } ,
+       
       },
 
 
@@ -988,7 +988,12 @@ const lastDay = moment().endOf('month').format('YYYY-M-DD');
   ]
     }
     
-    ]
+    ],
+    // where:{
+    // updatedAt: {
+    //   [Op.gte]: firstDay,
+    //   [Op.lt]:lastDay
+    // } },
     });
     //const {rows,count}=device;
     //console.log(rows,count,deviceGroup)
