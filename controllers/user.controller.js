@@ -823,15 +823,18 @@ exports.practiceGetAssign = async (req, res) => {
 
 	const assignedData = await CustomerAssign.findOne({
 		where: {
+			type: "PRACTICE",
 			assigned_id: assigned_id
 		}
 	})
+	console.log("assignedData", assignedData)
 
 	const users = await User.findAll({
 		where: {
 			user_type: userType
 		}
 	})
+	console.log("users", users)
 
 	const userIds = users.map(data => {return data.id})
 
