@@ -840,10 +840,10 @@ const lastDay = moment().endOf('month').format('YYYY-M-DD');
       where: {
 
         assignStatus: req.params.assignStatus,
-        updatedAt: {
-          [Op.gte]: new Date(firstDay),
-          [Op.lt]: new Date(lastDay)
-        } ,
+        // updatedAt: {
+        //   [Op.gte]: new Date(firstDay),
+        //   [Op.lt]: new Date(lastDay)
+        // } ,
 
       },
       include:[{
