@@ -1333,7 +1333,8 @@ module.exports.getKitById = async (req, res, next) => {
     res.status(400).send(error);
     console.log(error);
   }
-};
+}; 
+
 module.exports.getPatientDetails = async (req, res, next) => {
   try {
    
