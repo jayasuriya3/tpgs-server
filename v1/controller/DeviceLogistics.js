@@ -1640,12 +1640,13 @@ console.log(req.body)
 return Device.bulkCreate(
 req.body ,
     {
-     updateOnDuplicate:["comment","receiveStatus"],
+     updateOnDuplicate:["comment","receiveStatus","editedBy"],
     }
   
    
     
   ).then((result) => {
+    console.log("updated result",result)
     return Kit.update({deviceReceiveStatusCheck:true},
       {
       where:{
