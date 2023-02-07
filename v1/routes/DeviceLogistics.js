@@ -51,6 +51,7 @@ router.get("/AssignedDispatchKit/:assignStatus", Controller.DeviceLogistics.Assi
 router.get("/viewKitAccessoriesDetail/:id", Controller.DeviceLogistics.viewKitAccessoriesDetail);
 //get patient by kit id
 router.get("/viewPatientDetail/:id", Controller.DeviceLogistics.viewPatientDetail);
+router.get("/getPatientDetails/:id", Controller.DeviceLogistics.getPatientDetails);
 //
 router.get("/viewShippingDetail/:id", Controller.DeviceLogistics.viewShippingDetail);
 //viewKitPatientDetail

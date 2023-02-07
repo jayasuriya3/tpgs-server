@@ -1334,6 +1334,27 @@ module.exports.getKitById = async (req, res, next) => {
     console.log(error);
   }
 };
+module.exports.getPatientDetails = async (req, res, next) => {
+  try {
+   
+    const kit = await Patient.findOne({
+      where: {
+
+        id: req.params.id
+      },
+      attributes:[
+        'patientName','hospitalName'
+      ]
+    });
+  
+    res.json(kit);
+  
+  } catch (error) {
+    return next({ status: 404, message: error });
+    res.status(400).send(error);
+    console.log(error);
+  }
+};
 // module.exports.viewKitPatientDetail = async (req, res, next) => {
 //   try {
    
