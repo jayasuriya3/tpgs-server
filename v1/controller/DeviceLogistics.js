@@ -892,6 +892,55 @@ const lastDay = moment().endOf('month').format('YYYY-M-DD');
     console.log(error);
   }
 };
+module.exports.getAssignedPatient = async (req, res, next) => {
+  try {
+
+
+    const patient = await Patient.findAll({
+      where: {
+
+        assignStatus: req.params.assignStatus,
+        updatedAt: {
+          [Op.gte]: new Date(req.params.startDate),
+          [Op.lt]: new Date(req.params.endDate)
+        } ,
+
+      },
+      include:[{
+        model:Kit,
+        include:[{
+          model:Device,
+          include:[{
+            model: Service,
+            attribute:['service']
+           // required: true // this will inner join the Service model
+          }, {
+            model: Accessory,
+            attribute:['accessory']
+          //  required: true // this will inner join the Accessory model
+          }, {
+            model: Vendor,
+            attribute:['vendorName']
+           // required: true // this will inner join the Vendor model
+          },
+       
+        ]
+        }]
+      }],
+      order: [['updatedAt', 'DESC']],
+
+
+
+    });
+  
+    res.send(patient);
+ 
+  } catch (error) {
+    return next({ status: 404, message: error });
+    res.status(400).send(error);
+    console.log(error);
+  }
+};
 //assign unassigned kit
 module.exports.incompleteDeviceRefurnish = async (req, res, next) => {
   try {
