@@ -52,7 +52,7 @@ router.get("/viewKitAccessoriesDetail/:id", Controller.DeviceLogistics.viewKitAc
 //get patient by kit id
 router.get("/viewPatientDetail/:id", Controller.DeviceLogistics.viewPatientDetail);
 router.get("/getPatientDetails/:id", Controller.DeviceLogistics.getPatientDetails);
-router.get("/getAssignedPatient/:startDate/:endDate", Controller.DeviceLogistics.getPatientDetails);
+router.get("/getAssignedPatient/:startDate/:endDate", Controller.DeviceLogistics.getAssignedPatient);
 //
 router.get("/viewShippingDetail/:id", Controller.DeviceLogistics.viewShippingDetail);
 //viewKitPatientDetail
