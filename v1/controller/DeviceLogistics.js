@@ -902,6 +902,7 @@ module.exports.getAssignedPatient = async (req, res, next) => {
           [Op.gte]: new Date(req.params.startDate),
           [Op.lt]: new Date(req.params.endDate)
         } ,
+        assignStatus:"Assigned"
 
       },
       include:[{
