@@ -1159,7 +1159,11 @@ module.exports.completedDevice = async (req, res, next) => {
     const devices = await Kit.findAll({
       
         where:{
-         status:"Completed"
+         status:"Completed",
+         updatedAt: {
+          [Op.gte]: new Date(req.params.startDate),
+          [Op.lt]: new Date(req.params.endDate)
+        } ,
       }
     ,
       include:[{

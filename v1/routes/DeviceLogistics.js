@@ -92,7 +92,7 @@ router.get("/getLogisticMinMaxYear", Controller.DeviceLogistics.getLogisticMinMa
 
 router.get("/receiptEntryReturn/:shippingStatus/:returnStatus", Controller.DeviceLogistics.receiptEntryReturn);
 
-router.get("/completedDevice", Controller.DeviceLogistics.completedDevice);
+router.get("/completedDevice/:startDate/:endDate", Controller.DeviceLogistics.completedDevice);
 //logisticAnalysis
 router.get("/logisticAnalysis/:startDate/:endDate", Controller.DeviceLogistics.logisticAnalysis);
 //kit dashboard
