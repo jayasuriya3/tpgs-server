@@ -1037,6 +1037,13 @@ const lastDay = moment().subtract(30, 'days').format('YYYY-M-DD');;
     }
     
     ],
+    where:{
+      status:"Completed",
+      updatedAt: {
+       [Op.gte]: new Date(req.params.startDate),
+       [Op.lt]: new Date(req.params.endDate)
+     } ,
+   }
     // where:{
     // updatedAt: {
     //   [Op.gte]: firstDay,   

@@ -16,7 +16,7 @@ router.post("/login", Controller.DeviceLogistics.DeviceLogisticLogin);
 //add patient
 router.post("/addPatient", Controller.DeviceLogistics.addPatient);
 //get
-router.get("/LogisticHistories", Controller.DeviceLogistics.logisticHistories);
+router.get("/LogisticHistories/:startDate/:endDate", Controller.DeviceLogistics.logisticHistories);
 
 //all service
 router.get("/allService", Controller.AssetMaster.AllService);
