@@ -308,41 +308,45 @@ exports.getCustomerAssignedIds = async (req, res) => {
 			})
 		})
 		const targetRoles = targetRole ? targetRole.split(',') : null;
+		console.log(targetRoles);
 		console.log({ referenceIds, rest, type });
 		let findAssignedUser = [];
 		let findNotAssignedUser = [];
 
 		switch (type) {
 			case "USER": {
-				findAssignedUser = await User.findAll({
+				const assignedUserData = await User.findAll({
 					where: {
 						id: {
 							[Op.in]: referenceIds,
-						},
-						...(targetRoles
-							? {
-								role: {
-									[Op.in]: targetRoles
-								}
-							}
-							: {}),
+						}
 					},
 				});
-				findNotAssignedUser = await User.findAll({
+				console.log(assignedUserData)				
+				assignedUserData.map((data) => {
+					targetRoles.map((elm)=>{
+						if(JSON.parse(data.role?.toLowerCase()).includes(elm.toLowerCase())){
+							findAssignedUser.push(data);
+						}
+					})
+				})
+				const unassignedUserData = await User.findAll({
 					where: {
-						...(targetRoles
-							? {
-								role: {
-									[Op.in]: targetRoles
-								},
-							}
-							: {}),
 						id: {
 							// [Op.notIn]: referenceIds,
 							[Op.notIn]: assignedIds,
 						},
 					},
 				});
+				console.log("unassignedUserData",unassignedUserData)
+				unassignedUserData.map((data) => {
+					console.log(data.role?.toLowerCase())
+					targetRoles.map((elm)=>{
+						if(JSON.parse(data.role?.toLowerCase()).includes(elm.toLowerCase())){
+							findNotAssignedUser.push(data);
+						}
+					})
+				})
 				break;
 			}
 			case "PRACTICE": {
