@@ -58,6 +58,8 @@ router.get("/viewShippingDetail/:id", Controller.DeviceLogistics.viewShippingDet
 //viewKitPatientDetail
 
 //viewKitAccessoryDetailById 
+
+
 router.get("/viewKitAccessoryDetailById/:kitId", Controller.DeviceLogistics.viewKitAccessoryDetailById);
 //dispatchUpdateLogistics
 router.patch("/dispatchUpdateLogistics/:kitId", Controller.DeviceLogistics.dispatchUpdateLogistics);
