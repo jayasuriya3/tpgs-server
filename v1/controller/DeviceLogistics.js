@@ -1206,11 +1206,80 @@ module.exports.qualityCheckDevice = async (req, res, next) => {
 };
 module.exports.completedDevice = async (req, res, next) => {
   try {
-   
+    if(req.params.startDate===req.params.endDate){
+      console.log("req.params.startDate,endDate",req.params.startDate,req.params.endDate)
+      // const patient = await Patient.findAll({
+      //   where: {
+      //     where: sequelize.where(sequelize.fn('DATE', sequelize.col('Patient.updatedAt')), req.params.startDate),
+      
     const devices = await Kit.findAll({
       
         where:{
          status:"Completed",
+         where: sequelize.where(sequelize.fn('DATE', sequelize.col('Kit.updatedAt')), req.params.startDate),
+
+        //  updatedAt: {
+        //   [Op.gte]: new Date(req.params.startDate),
+        //   [Op.lt]: new Date(req.params.endDate)
+        // } ,
+      }
+    ,
+      include:[{
+        model:Device,
+        include:[{
+          model: Service,
+          attributes:["service"]
+         // required: true // this will inner join the Service model
+        }, {
+          model: Accessory,
+          attributes:["accessory"]
+  
+        //  required: true // this will inner join the Accessory model
+        }, {
+          model: Vendor,
+         attributes:["vendorName"]
+  
+         // required: true // this will inner join the Vendor model
+        }] ,
+      where: {
+
+       receiveStatus:"Received",
+       
+        deviceStatus:{
+          [Op.not]:null
+        },
+        kitId:{
+          [Op.not]:null
+        }
+        
+      },
+    },
+    {
+    model:Logistic
+    },
+    {
+    model:Patient
+    }
+  ]
+     
+    });
+    //const {rows,count}=device;
+    //console.log(rows,count,deviceGroup)
+  return  res.send(devices);
+  }
+  else{
+    // if(req.params.startDate===req.params.endDate){
+      console.log("req.params.startDate,endDate",req.params.startDate,req.params.endDate)
+      // const patient = await Patient.findAll({
+      //   where: {
+      //     where: sequelize.where(sequelize.fn('DATE', sequelize.col('Patient.updatedAt')), req.params.startDate),
+      
+    const devices = await Kit.findAll({
+      
+        where:{
+         status:"Completed",
+        // where: sequelize.where(sequelize.fn('DATE', sequelize.col('Patient.updatedAt')), req.params.startDate),
+
          updatedAt: {
           [Op.gte]: new Date(req.params.startDate),
           [Op.lt]: new Date(req.params.endDate)
@@ -1258,7 +1327,9 @@ module.exports.completedDevice = async (req, res, next) => {
     });
     //const {rows,count}=device;
     //console.log(rows,count,deviceGroup)
-    res.send(devices);
+  return  res.send(devices);
+  // }
+  }
     // const vendor =await  Vendor.findAll();
 
     // res.send(device);
