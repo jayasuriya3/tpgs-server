@@ -1039,9 +1039,17 @@ module.exports.logisticHistories = async (req, res, next) => {
 //const lastDay = moment().endOf('month').format('YYYY-M-DD');
 const firstDay = moment().format('YYYY-M-DD');
 console.log("firstday",firstDay,new Date())
-const lastDay = moment().subtract(30, 'days').format('YYYY-M-DD');;
+const lastDay = moment().subtract(30, 'days').format('YYYY-M-DD');
+
   try {
+    if(req.params.startDate===req.params.endDate){
+      console.log("req.params.startDate,endDate",req.params.startDate,req.params.endDate)
+      // const patient = await Patient.findAll({
+      //   where: {
+      //     where: sequelize.where(sequelize.fn('DATE', sequelize.col('Patient.updatedAt')), req.params.startDate),
+      
    
+
     const patient = await Kit.findAll({
     
       include:[{
@@ -1083,6 +1091,75 @@ const lastDay = moment().subtract(30, 'days').format('YYYY-M-DD');;
     ],
     where:{
       status:"Completed",
+      where: sequelize.where(sequelize.fn('DATE', sequelize.col('Kit.updatedAt')), req.params.startDate),
+
+    //   updatedAt: {
+    //    [Op.gte]: new Date(req.params.startDate),
+    //    [Op.lte]: new Date(req.params.endDate)
+    //  } ,
+   }
+    // where:{
+    // updatedAt: {
+    //   [Op.gte]: firstDay,   
+    //   [Op.lt]:lastDay
+    // } },
+    });
+    //const {rows,count}=device;
+    //console.log(rows,count,deviceGroup)
+ return   res.send(patient);
+  }
+  else{
+   
+      console.log("req.params.startDate,endDate",req.params.startDate,req.params.endDate)
+      // const patient = await Patient.findAll({
+      //   where: {
+      //     where: sequelize.where(sequelize.fn('DATE', sequelize.col('Patient.updatedAt')), req.params.startDate),
+      
+   
+
+    const patient = await Kit.findAll({
+    
+      include:[{
+        model:Patient,
+       
+      },
+    {
+      model:Logistic,
+      where:{
+        shippingStatus:{
+          [Op.or]:["Shipped","In Transit","Delivered","Received By Patient"]  
+          
+        },
+       
+      },
+
+
+    },
+    {
+      model:Device,
+      include:[{
+        model:Service,
+        attributes:['service']
+      },
+      {
+    model:Accessory,
+    attributes:['accessory']
+
+      },
+      {
+        model:Vendor,
+        attributes:['vendorName']
+
+          },
+
+  ]
+    }
+    
+    ],
+    where:{
+      status:"Completed",
+     // where: sequelize.where(sequelize.fn('DATE', sequelize.col('Kit.updatedAt')), req.params.startDate),
+
       updatedAt: {
        [Op.gte]: new Date(req.params.startDate),
        [Op.lte]: new Date(req.params.endDate)
@@ -1097,6 +1174,7 @@ const lastDay = moment().subtract(30, 'days').format('YYYY-M-DD');;
     //const {rows,count}=device;
     //console.log(rows,count,deviceGroup)
     res.send(patient);
+  }
     // const vendor =await  Vendor.findAll();
 
     // res.send(device);
