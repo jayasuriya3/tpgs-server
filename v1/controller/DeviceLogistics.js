@@ -894,13 +894,57 @@ const lastDay = moment().endOf('month').format('YYYY-M-DD');
 };
 module.exports.getAssignedPatient = async (req, res, next) => {
   try {
+if(req.params.startDate===req.params.endDate){
+  console.log("req.params.startDate,endDate",req.params.startDate,req.params.endDate)
+  const patient = await Patient.findAll({
+    where: {
+      where: sequelize.where(sequelize.fn('DATE', sequelize.col('Patient.updatedAt')), req.params.startDate),
+  
+      // updatedAt: {
+      //  //[Op.eq]: 
 
+      //   //[Op.gte]: req.params.startDate,
+      //   //  [Op.lte]: new Date(req.params.endDate)
+      // } ,
+      assignStatus:"Assigned"
+
+    },
+    include:[{
+      model:Kit,
+      include:[{
+        model:Device,
+        include:[{
+          model: Service,
+          attribute:['service']
+         // required: true // this will inner join the Service model
+        }, {
+          model: Accessory,
+          attribute:['accessory']
+        //  required: true // this will inner join the Accessory model
+        }, {
+          model: Vendor,
+          attribute:['vendorName']
+         // required: true // this will inner join the Vendor model
+        },
+     
+      ]
+      }]
+    }],
+    order: [['updatedAt', 'DESC']],
+
+
+
+  });
+
+return  res.send(patient);
+}
+else{
 
     const patient = await Patient.findAll({
       where: {
         updatedAt: {
           [Op.gte]: new Date(req.params.startDate),
-          [Op.lt]: new Date(req.params.endDate)
+          [Op.lte]: new Date(req.params.endDate)
         } ,
         assignStatus:"Assigned"
 
@@ -933,7 +977,7 @@ module.exports.getAssignedPatient = async (req, res, next) => {
     });
   
     res.send(patient);
- 
+  }
   } catch (error) {
     return next({ status: 404, message: error });
     res.status(400).send(error);
@@ -1041,7 +1085,7 @@ const lastDay = moment().subtract(30, 'days').format('YYYY-M-DD');;
       status:"Completed",
       updatedAt: {
        [Op.gte]: new Date(req.params.startDate),
-       [Op.lt]: new Date(req.params.endDate)
+       [Op.lte]: new Date(req.params.endDate)
      } ,
    }
     // where:{
