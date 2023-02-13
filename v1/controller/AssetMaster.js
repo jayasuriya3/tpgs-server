@@ -1003,6 +1003,7 @@ else{
 module.exports.deviceAnalysis = async (req,res,next) => {
   try {
     console.time('blocking of deviceAnalysis');
+    console.time('blocking of deviceAnalysis');
   //  deviceAnalysis api
      console.log("device Analysis params",req.params.startDate,req.params.endDate)
   const deviceAnalysis=  Device.findAll({
