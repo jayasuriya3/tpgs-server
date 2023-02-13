@@ -1042,7 +1042,7 @@ module.exports.deviceAnalysis = async (req,res,next) => {
     where: {
     
       deviceStatus:"Assigned",
-      createdAt: {
+      updatedAt: {
       [Op.gte]: new Date(req.params.startDate),
       [Op.lt]: new Date(req.params.endDate)
       }
@@ -1055,7 +1055,7 @@ module.exports.deviceAnalysis = async (req,res,next) => {
     
       deviceStatus:{[Op.or]:["Defective","Missing","Damaged"]},
       
-      createdAt: {
+      updatedAt: {
       [Op.gte]: new Date(req.params.startDate),
       [Op.lt]: new Date(req.params.endDate)
       }
@@ -1077,7 +1077,7 @@ const kits=  Device.findAll({
       model: Accessory, attributes: [],
       where:{
         accessoryType:"Sensor",
-        createdAt: {
+        updatedAt: {
                 [Op.gte]: new Date(req.params.startDate),
                 [Op.lt]: new Date(req.params.endDate)
               } ,
