@@ -148,6 +148,7 @@ app.use(
       "https://pulse-gate-suites.vercel.app",
       "https://tpgs-mono-git-develop-faisalmahamudcs.vercel.app",
       "https://tpgs-mono.vercel.app",
+      "https://tpgs-mono-git-chore-create-kit-page-faisalmahamudcs.vercel.app",
 
       "*",
     ],
@@ -596,7 +597,8 @@ const io = new Server(server, {
       "https://device-logistic-git-develop-faisalmahamudcs.vercel.app",
       "https://tpgs-mono.vercel.app",
       "*",
-      "https://tpgs-mono-git-develop-faisalmahamudcs.vercel.app"
+      "https://tpgs-mono-git-develop-faisalmahamudcs.vercel.app",
+      "https://tpgs-mono-git-chore-create-kit-page-faisalmahamudcs.vercel.app"
 
     ],
     methods: ["GET", "POST"],
