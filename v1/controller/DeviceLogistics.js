@@ -906,7 +906,10 @@ if(req.params.startDate===req.params.endDate){
       //   //[Op.gte]: req.params.startDate,
       //   //  [Op.lte]: new Date(req.params.endDate)
       // } ,
-      assignStatus:"Assigned"
+      assignStatus:{
+        [Op.or]:["Assigned","Reassigned"]  
+
+      }
 
     },
     include:[{
@@ -946,7 +949,10 @@ else{
           [Op.gte]: new Date(req.params.startDate),
           [Op.lte]: new Date(req.params.endDate)
         } ,
-        assignStatus:"Assigned"
+        assignStatus:{
+          [Op.or]:["Assigned","Reassigned"]  
+  
+        }
 
       },
       include:[{
@@ -1423,7 +1429,11 @@ module.exports.AssignedDispatchKit = async (req, res, next) => {
     const kit = await Kit.findAll({
       where: {
 
-         assignStatus: req.params.assignStatus,
+         assignStatus:{
+          [Op.or]:["Assigned","Reassigned"]  
+
+          
+         },
          shippingStatus:{[Op.or]:["Ready to Ship",null]}
 
        
