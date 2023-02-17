@@ -1811,7 +1811,8 @@ module.exports.ReAssignKit = async (req, res, next) => {
       patientId:req.body.patientId,
       patientName:req.body.patientName,
       assignStatus:"Assigned",
-      lastModifiedBy:req.body.lastModifiedBy
+      assignedDate:new Date(),
+       lastModifiedBy:req.body.lastModifiedBy
   },
   {
   where: {
@@ -1823,7 +1824,7 @@ module.exports.ReAssignKit = async (req, res, next) => {
 
   const  patient=await Patient.update({
     kitId:req.body.kitId,
-    assignStatus:"Assigned",
+    assignStatus:"Reassigned",
     modifiedBy:req.body.lastModifiedBy
 
   },
