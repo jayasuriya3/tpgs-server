@@ -1271,7 +1271,7 @@ module.exports.qualityCheckDevice = async (req, res, next) => {
     ],
     [   sequelize.fn("COALESCE", sequelize.col("Device.vendor"), sequelize.col("Vendor.vendorName")),
     "vendor"
-  ],"deviceId","deviceModel","warrantyTime","warranty","purchaseDate","expiryDate","comment","kitId","updatedAt","editedBy"
+  ],"id","deviceId","deviceModel","warrantyTime","warranty","purchaseDate","expiryDate","comment","kitId","updatedAt","editedBy"
   ]
 
      
