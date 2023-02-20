@@ -1096,7 +1096,7 @@ const lastDay = moment().subtract(30, 'days').format('YYYY-M-DD');
     
     ],
     where:{
-      status:"Completed",
+    //  status:"Completed",
       where: sequelize.where(sequelize.fn('DATE', sequelize.col('Kit.updatedAt')), req.params.startDate),
 
     //   updatedAt: {
