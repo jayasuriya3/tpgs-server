@@ -1602,7 +1602,7 @@ module.exports.deviceDetailUpdate = async (req, res) => {
         returnStatus: req.body.returnStatus,
         deviceStatus:req.body.deviceStatus,
         additionalInfo: req.body.additionalInfo,
-        deviceStatusComment: req.body.deviceStatusComment,
+        comment: req.body.deviceStatusComment,
         mobileNo: req.body.mobileNo ,
         vendor:req.body.vendor,
 purchaseDate:req.body.purchaseDate ,

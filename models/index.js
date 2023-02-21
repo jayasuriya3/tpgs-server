@@ -36,19 +36,25 @@ Object.keys(db).forEach(modelName => {
 console.log("db",db)
 db.sequelize = sequelize;
    db.Device.belongsTo(db.Service, { foreignKey: 'serviceId' })
+   db.KitAccessoryInfo.belongsTo(db.Service, { foreignKey: 'serviceId' })
   db.AccessoryOrder.belongsTo(db.Service, { foreignKey: 'serviceId' })
    db.Accessory.belongsTo(db.Service, { foreignKey: 'serviceId' })
    db.Service.hasMany(db.Accessory, { foreignKey: 'serviceId' })
    db.Service.hasMany(db.Device, { foreignKey: 'serviceId' })
+   db.Service.hasMany(db.KitAccessoryInfo, { foreignKey: 'serviceId' })
    db.Service.hasMany(db.AccessoryOrder, { foreignKey: 'serviceId' })
       db.Device.belongsTo(db.Accessory, { foreignKey: 'accessoryId' })
+      db.KitAccessoryInfo.belongsTo(db.Accessory, { foreignKey: 'accessoryId' })
       db.AccessoryOrder.belongsTo(db.Accessory, { foreignKey: 'accessoryId' })
       db.Accessory.hasMany(db.Device, { foreignKey: 'accessoryId' })
+      db.Accessory.hasMany(db.KitAccessoryInfo, { foreignKey: 'accessoryId' })
       db.AccessoryOrder.hasMany(db.Device, { foreignKey: 'accessoryId' })
       db.Device.belongsTo(db.Vendor, { foreignKey: 'vendorId' })
       db.Vendor.hasMany(db.Device, { foreignKey: 'vendorId' })
       db.AccessoryOrder.belongsTo(db.Vendor, { foreignKey: 'vendorId' })
       db.Vendor.hasMany(db.AccessoryOrder, { foreignKey: 'vendorId' })
+      db.KitAccessoryInfo.belongsTo(db.Vendor, { foreignKey: 'vendorId' })
+      db.Vendor.hasMany(db.KitAccessoryInfo, { foreignKey: 'vendorId' })
       db.Device.belongsTo(db.Order, { foreignKey: 'orderId' })
     //  db.AccessoryOrder.belongsTo(db.Order, { foreignKey: 'orderId' })
       db.Accessory.belongsTo(db.Service, { foreignKey: 'serviceId' })
@@ -58,12 +64,14 @@ db.sequelize = sequelize;
       db.Device.belongsTo(db.OrderShipping, { foreignKey: 'shippingId' })
       db.Order.belongsTo(db.OrderShipping, { foreignKey: 'shippingId' })
       db.OrderShipping.belongsTo(db.Order, { foreignKey: 'orderId' })
+      db.KitAccessoryInfo.belongsTo(db.Kit, { foreignKey: 'kitId' })
       db.KitAccessory.belongsTo(db.Kit, { foreignKey: 'kitId' })
       db.Device.belongsTo(db.Kit, { foreignKey: 'kitId' })
       db.Kit.belongsTo(db.Patient, { foreignKey: 'patientId' })
       db.Patient.belongsTo(db.Kit, { foreignKey: 'kitId' }),
       db.Kit.hasMany(db.Patient, { foreignKey: 'kitId' }),
       db.Kit.hasMany(db.Device, { foreignKey: 'kitId' }),
+      db.Kit.hasMany(db.KitAccessoryInfo, { foreignKey: 'kitId' }),
       db.Logistic.belongsTo(db.Kit, { foreignKey: 'kitId' }),
       db.Kit.hasOne(db.Logistic, { foreignKey: 'kitId' }),
 

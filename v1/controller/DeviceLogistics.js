@@ -12,7 +12,7 @@ const AccessoryInfo = require("../../models").AccessoryInfo;
 const OrderShipping = require("../../models").OrderShipping;
 const Patient = require("../../models").Patient;
 const Logistic = require("../../models").Logistic;
-const KitAccessory = require("../../models").KitAccessory;
+const KitAccessoryInfo = require("../../models").KitAccessoryInfo;
 const Kit = require("../../models").Kit;
 const moment =require('moment');
 
@@ -344,7 +344,10 @@ module.exports.AddAccessoryKit = async (req, res, next) => {
     }
     
   )
- console.log("deviceUpdate,deviceId",deviceId,deviceUpdate)
+    const createKit=await KitAccessoryInfo.bulkCreate(req.body.searchDevice);
+    
+  
+ console.log("deviceUpdate,deviceId,createKit",deviceId,deviceUpdate,createKit)
 
     res.send({kit,deviceUpdate});
   } catch (error) {
@@ -702,7 +705,7 @@ module.exports.kitDetails = async (req, res) => {
 module.exports.viewKitAccessoryDetail = async (req, res, next) => {
   try {
    
-    const kitAccessory = await Device.findAll({
+    const kitAccessory = await KitAccessoryInfo.findAll({
       where: {
        // serviceId: req.body.serviceId,
        // accessoryId: req.body.accessoryId,
@@ -1011,7 +1014,7 @@ module.exports.incompleteDeviceRefurnish = async (req, res, next) => {
 
     },
     {
-      model:Device,
+      model:KitAccessoryInfo,
       include:[{
         model:Service,
         attributes:["service"]
@@ -1232,7 +1235,7 @@ module.exports.logisticSummary = async (req, res, next) => {
 module.exports.qualityCheckDevice = async (req, res, next) => {
   try {
    
-    const kitAccessory = await Device.findAll({
+    const kitAccessory = await KitAccessoryInfo.findAll({
       where: {
        statusCheck:{
         [Op.is]:null
@@ -1263,15 +1266,15 @@ module.exports.qualityCheckDevice = async (req, res, next) => {
 
        // required: true // this will inner join the Vendor model
       }] ,
-      attributes: [[   sequelize.fn("COALESCE", sequelize.col("Device.accessory"), sequelize.col("Accessory.accessory")),
+      attributes: [[   sequelize.fn("COALESCE", sequelize.col("KitAccessoryInfo.accessory"), sequelize.col("Accessory.accessory")),
       "accessory"
     ],
     [   sequelize.fn("COALESCE", sequelize.col("Service.service")),
       "service"
     ],
-    [   sequelize.fn("COALESCE", sequelize.col("Device.vendor"), sequelize.col("Vendor.vendorName")),
+    [   sequelize.fn("COALESCE", sequelize.col("KitAccessoryInfo.vendor"), sequelize.col("Vendor.vendorName")),
     "vendor"
-  ],"id","deviceId","deviceModel","warrantyTime","warranty","purchaseDate","expiryDate","comment","kitId","updatedAt","editedBy"
+  ],"KitAccessoryId","deviceId","deviceModel","warrantyTime","warranty","purchaseDate","expiryDate","comment","kitId","updatedAt","editedBy"
   ]
 
      
@@ -1309,7 +1312,7 @@ module.exports.completedDevice = async (req, res, next) => {
       }
     ,
       include:[{
-        model:Device,
+        model:KitAccessoryInfo,
         include:[{
           model: Service,
           attributes:["service"]
@@ -1371,7 +1374,7 @@ module.exports.completedDevice = async (req, res, next) => {
       }
     ,
       include:[{
-        model:Device,
+        model:KitAccessoryInfo,
         include:[{
           model: Service,
           attributes:["service"]
@@ -1860,6 +1863,7 @@ module.exports.ReAssignKit = async (req, res, next) => {
 
     }
 module.exports.deviceWorkingStatusUpdate = async (req, res, next) => {
+  try{
 const  deviceUpdate=await Device.update({
   deviceStatus:req.body.deviceStatus,
   deviceStatusComment:req.body.deviceStatusComment,
@@ -1870,6 +1874,19 @@ const  deviceUpdate=await Device.update({
 {
 where:{
   deviceId:req.params.deviceId
+}
+}
+)
+const  KitUpdate=await KitAccessoryInfo.update({
+  deviceStatus:req.body.deviceStatus,
+  deviceStatusComment:req.body.deviceStatusComment,
+  statusCheck:"Completed",
+  editedBy:req.body.editedBy,
+  deviceStatusUpdateDate:new Date()
+},
+{
+where:{
+  kitId:req.body.kitId
 }
 }
 )
@@ -1887,19 +1904,20 @@ where:{
    
     res.status(200).send(deviceUpdate)
    
-      .catch((error) => {
-        return next({ status: 404, message: error });
-      });
-    
 
     
-    
+  }
+      catch (error) {
+        return next({ status: 404, message: error });
+      
+      } 
+  
      
     }
     //update device received or not and comment for device refurbish
 module.exports.deviceStatus = async (req, res, next) => {
 //console.log(req.params.kitId,req.body.comment,req.body.receiveStatus,req.body)
-console.log(req.body)
+console.log("device status req",req.body)
 return Device.bulkCreate(
 req.body ,
     {
@@ -1908,7 +1926,27 @@ req.body ,
   
    
     
-  ).then((result) => {
+  )
+  .then((result) => {
+
+
+    
+    console.log("updated result",result)
+    return KitAccessoryInfo.bulkCreate(
+      req.body ,
+          {
+           updateOnDuplicate:["comment","receiveStatus","editedBy"],
+          }
+        
+         
+          
+        )
+      
+      })
+  .then((result) => {
+
+
+
     console.log("updated result",result)
     return Kit.update({deviceReceiveStatusCheck:true},
       {
@@ -1921,7 +1959,7 @@ req.body ,
 
     console.log("device assign  Status changed",result)
 
-res.status(200).send(result)
+ res.status(200).send(result)
   })
   .catch((error) => {
     return next({ status: 404, message: error });
