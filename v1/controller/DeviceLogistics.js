@@ -1882,7 +1882,7 @@ const  KitUpdate=await KitAccessoryInfo.update({
   deviceStatusComment:req.body.deviceStatusComment,
   statusCheck:"Completed",
   editedBy:req.body.editedBy,
-  deviceStatusUpdateDate:new Date()
+  deviceStatusUpdateDate:new Date() 
 },
 {
 where:{
