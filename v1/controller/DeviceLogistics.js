@@ -225,19 +225,44 @@ module.exports.updateDeleteAccessoryKit = async (req, res) => {
 
     // const {id}=req.body;
     console.log(req.params.kitId)
-    const kit = await Device.findAll({
+    //finding all device of the specific kitId
+    const kit = await KitAccessoryInfo.findAll({
       where:{kitId:req.params.kitId}});
     // console.log("filter",req.body.filter(req=> kit.includes(req)))
+//    //then finding on these kit how many devices are there 
 
     console.log("kit for delete",kit)
+    //    //then finding on these kit how many devices are there 
+
     const deviceId=kit.map(device=>device.deviceId);
     const id=kit.map(device=>device.id);
+    //then mapping the specific device id
     const updatedDeviceId=req.body.map(device=>device.deviceId)
 
+    const Id=kit.map(device=>device.KitAccessoryId);
+    const ids=kit.map(device=>device.id);
+    const updatedId=req.body.map(device=>device.KitAccessoryId)
 
+    console.log("kitaccessory data which previously exist",Id)
+    console.log("kitaccessory data which updated data",updatedId)
+    //for finding id of kit accessory
+const elementsToDeleteKitAccessoryId = Id.filter(element => !updatedId.includes(element));
+const elementsToDeleteDeviceId = deviceId.filter(element => !updatedDeviceId.includes(element));
+console.log("need to delete element",elementsToDeleteDeviceId)
+// const OldDeviceId=elementsToDelete.map(device=>device.deviceId);
+
+// const KitAccessoryId=elementsToDelete.map(device=>device.KitAccessoryId);
+
+    
+
+//then firstly updating it to device
 await Device.update({kitId:null,
 deviceStatus:null
-},{where:{deviceId:deviceId}})
+},{where:{deviceId:elementsToDeleteDeviceId}})
+
+const updatedKitAccessory=await KitAccessoryInfo.update({kitId:null,
+  deviceStatus:null
+  },{where:{KitAccessoryId:elementsToDeleteKitAccessoryId}})
 
  await Kit.update({quantity:req.body.length,
 lastModifiedBy:req.params.editedBy
@@ -251,6 +276,20 @@ lastModifiedBy:req.params.editedBy
   const updates= await Device.update({kitId:req.params.kitId,
   deviceStatus:"Assigned"
   },{where:{deviceId:updatedDeviceId}})
+  console.log("deviceUpdate",updates)
+  // const updatesKitAccessory= await KitAccessoryInfo.update({kitId:req.params.kitId,
+  // deviceStatus:"Assigned"
+  // },{where:{KitAccessoryId:updatedId}})
+
+  const updatesKitAccessory=await KitAccessoryInfo.bulkCreate(
+    req.body ,
+        {
+         updateOnDuplicate:["kitId","editedBy"],
+        })
+      
+       
+  
+  console.log("updatesKitAccessory",updatesKitAccessory)
 
   //const updates=await Device.bulkCreate(req.body,{updateOnDuplicate:['id']})
 
