@@ -38,6 +38,7 @@ router.patch("/AddAccessoryKit/:kitId", Controller.DeviceLogistics.AddAccessoryK
 //kit accessory details
 router.get("/viewKitAccessoryDetail/:kitId", Controller.DeviceLogistics.viewKitAccessoryDetail);
 router.get("/viewKitAccessoryDetailCompleted/:kitId", Controller.DeviceLogistics.viewKitAccessoryDetailCompleted);
+router.get("/getKitAccessoryMobileDevice/:KitAccessoryId", Controller.DeviceLogistics.getKitAccessoryMobileDevice);
 //update assign kit
 router.post("/AssignKit", Controller.DeviceLogistics.AssignKit);
 //Reassign Kit

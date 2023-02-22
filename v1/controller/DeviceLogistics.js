@@ -300,7 +300,17 @@ lastModifiedBy:req.params.editedBy
   }
 };
 
+module.exports.getKitAccessoryMobileDevice = async (req, res) => {
+  try {
+    const device = await KitAccessoryInfo.findOne({ where: {KitAccessoryId: req.params.KitAccessoryId } });
+    // const vendor =await  Vendor.findAll();
 
+    res.send(device);
+  } catch (error) {
+    res.status(400).send(error);
+    console.log(error);
+  }
+};
 module.exports.allDeviceKitSearch = async (req, res, next) => {
   try {
    
