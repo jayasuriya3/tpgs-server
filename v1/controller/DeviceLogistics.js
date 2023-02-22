@@ -994,12 +994,19 @@ if(req.params.startDate===req.params.endDate){
 return  res.send(patient);
 }
 else{
+  const startDate = new Date(req.params.startDate);
+const endDate = new Date(req.params.endDate);
 
+// Set the start time of the start date to 00:00:00 and the end time of the end date to 23:59:59
+startDate.setHours(0, 0, 0, 0);
+endDate.setHours(23, 59, 59, 999);
+
+  
     const patient = await Patient.findAll({
       where: {
         updatedAt: {
-          [Op.gte]: new Date(req.params.startDate),
-          [Op.lte]: new Date(req.params.endDate)
+          [Op.gte]: startDate,
+          [Op.lte]: endDate
         } ,
         assignStatus:{
           [Op.or]:["Assigned","Reassigned"]  
@@ -1579,11 +1586,24 @@ module.exports.AssignedKitList = async (req, res, next) => {
     res.send(kit);
   }
   else{
+    const startDate = new Date(req.params.startDate);
+    const endDate = new Date(req.params.endDate);
+    
+    // Set the start time of the start date to 00:00:00 and the end time of the end date to 23:59:59
+    startDate.setHours(0, 0, 0, 0);
+    endDate.setHours(23, 59, 59, 999);
+
     const kit = await Kit.findAll({
       where: {
+        // updatedAt: {
+        //   [Op.between]: [
+        //     sequelize.fn('DATE', req.params.startDate),
+        //     sequelize.fn('DATE', req.params.endDate)
+        //   ]
+        // },
         updatedAt: {
-          [Op.gte]: new Date(req.params.startDate),
-          [Op.lte]: new Date(req.params.endDate)
+          [Op.gte]: startDate,
+          [Op.lte]: endDate
         } ,
          assignStatus: req.params.assignStatus,
 
