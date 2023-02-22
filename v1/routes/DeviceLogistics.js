@@ -46,7 +46,7 @@ router.post("/ReAssignKit", Controller.DeviceLogistics.ReAssignKit);
 //get assigned kit
 router.get("/AssignedKit/:assignStatus", Controller.DeviceLogistics.AssignedKit); 
 //AssignedKitList
-router.get("/AssignedKitList/:assignStatus", Controller.DeviceLogistics.AssignedKitList); 
+router.get("/AssignedKitList/:assignStatus/:startDate/:endDate", Controller.DeviceLogistics.AssignedKitList); 
 router.get("/AssignedDispatchKit/:assignStatus", Controller.DeviceLogistics.AssignedDispatchKit); 
 //viewKitAccessoriesDetail by kit id
 router.get("/viewKitAccessoriesDetail/:id", Controller.DeviceLogistics.viewKitAccessoriesDetail);

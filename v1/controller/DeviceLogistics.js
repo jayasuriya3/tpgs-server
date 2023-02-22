@@ -1539,10 +1539,10 @@ module.exports.AssignedKit = async (req, res, next) => {
 };
 module.exports.AssignedKitList = async (req, res, next) => {
   try {
-   
+    if(req.params.startDate===req.params.endDate){
     const kit = await Kit.findAll({
       where: {
-
+        where: sequelize.where(sequelize.fn('DATE', sequelize.col('Kit.updatedAt')), req.params.startDate),
          assignStatus: req.params.assignStatus,
 
 
@@ -1551,25 +1551,25 @@ module.exports.AssignedKitList = async (req, res, next) => {
         include:[{
           model:Patient
         },
-      {
-        model:Device,
-        include:[{
-          model:Service,
-          attributes:['service']
-        },
-        {
-      model:Accessory,
-      attributes:['accessory']
+    //   {
+    //     model:KitAccessoryInfo,
+    //     include:[{
+    //       model:Service,
+    //       attributes:['service']
+    //     },
+    //     {
+    //   model:Accessory,
+    //   attributes:['accessory']
 
-        },
-        {
-          model:Vendor,
-          attributes:['vendorName']
+    //     },
+    //     {
+    //       model:Vendor,
+    //       attributes:['vendorName']
 
-            },
+    //         },
 
-    ]
-      }
+    // ]
+    //   }
       ]      
       
 
@@ -1577,6 +1577,49 @@ module.exports.AssignedKitList = async (req, res, next) => {
     //const {rows,count}=device;
     //console.log(rows,count,deviceGroup)
     res.send(kit);
+  }
+  else{
+    const kit = await Kit.findAll({
+      where: {
+        updatedAt: {
+          [Op.gte]: new Date(req.params.startDate),
+          [Op.lte]: new Date(req.params.endDate)
+        } ,
+         assignStatus: req.params.assignStatus,
+
+
+       //   shippingStatus:{[Op.not]:['Shipped']}
+        },
+        include:[{
+          model:Patient
+        },
+    //   {
+    //     model:KitAccessoryInfo,
+    //     include:[{
+    //       model:Service,
+    //       attributes:['service']
+    //     },
+    //     {
+    //   model:Accessory,
+    //   attributes:['accessory']
+
+    //     },
+    //     {
+    //       model:Vendor,
+    //       attributes:['vendorName']
+
+    //         },
+
+    // ]
+    //   }
+      ]      
+      
+
+    });
+    //const {rows,count}=device;
+    //console.log(rows,count,deviceGroup)
+    res.send(kit);
+  }
     // const vendor =await  Vendor.findAll();
 
     // res.send(device);
