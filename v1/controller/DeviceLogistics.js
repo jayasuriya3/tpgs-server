@@ -1549,7 +1549,7 @@ module.exports.AssignedKitList = async (req, res, next) => {
     if(req.params.startDate===req.params.endDate){
     const kit = await Kit.findAll({
       where: {
-        where: sequelize.where(sequelize.fn('DATE', sequelize.col('Kit.updatedAt')), req.params.startDate),
+        where: sequelize.where(sequelize.fn('DATE', sequelize.col('Kit.assignedDate')), req.params.startDate),
          assignStatus: req.params.assignStatus,
 
 
@@ -1601,7 +1601,7 @@ module.exports.AssignedKitList = async (req, res, next) => {
         //     sequelize.fn('DATE', req.params.endDate)
         //   ]
         // },
-        updatedAt: {
+        assignedDate: {
           [Op.gte]: startDate,
           [Op.lte]: endDate
         } ,
