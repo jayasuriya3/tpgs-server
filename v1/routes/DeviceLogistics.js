@@ -71,7 +71,7 @@ router.patch("/updateDeleteAccessoryKit/:kitId/:editedBy", Controller.DeviceLogi
 //updateKitReceiveStatus
 router.patch("/updateKitReceiveStatus/:kitId", Controller.DeviceLogistics.updateKitReceiveStatus);
 //deviceWorkingStatusUpdate update device status from qc
-router.patch("/deviceWorkingStatusUpdate/:deviceId", Controller.DeviceLogistics.deviceWorkingStatusUpdate);
+router.patch("/deviceWorkingStatusUpdate/:deviceId/:KitAccessoryId", Controller.DeviceLogistics.deviceWorkingStatusUpdate);
 //
 //updateLogisticReturn
 router.patch("/updateLogisticReturn/:logisticId", Controller.DeviceLogistics.updateLogisticReturn);

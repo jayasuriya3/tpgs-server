@@ -1998,7 +1998,7 @@ const  KitUpdate=await KitAccessoryInfo.update({
 },
 {
 where:{
-  kitId:req.body.kitId
+  KitAccessoryId:req.params.KitAccessoryId
 }
 }
 )
