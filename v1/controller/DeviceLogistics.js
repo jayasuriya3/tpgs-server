@@ -1467,10 +1467,11 @@ module.exports.completedDevice = async (req, res, next) => {
     },
     {
     model:Logistic,
-    returnDate: {
+   where:{
+     returnDate: {
       [Op.gte]: req.params.startDate,
       [Op.lte]:req.params.endDate
-    } ,
+    } },
     },
     {
     model:Patient
