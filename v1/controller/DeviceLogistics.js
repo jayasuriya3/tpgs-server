@@ -1468,8 +1468,8 @@ module.exports.completedDevice = async (req, res, next) => {
     {
     model:Logistic,
     returnDate: {
-      [Op.gte]: new Date(req.params.startDate),
-      [Op.lt]: new Date(req.params.endDate)
+      [Op.gte]: req.params.startDate,
+      [Op.lte]:req.params.endDate
     } ,
     },
     {
