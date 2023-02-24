@@ -1128,6 +1128,9 @@ const lastDay = moment().subtract(30, 'days').format('YYYY-M-DD');
           [Op.or]:["Shipped","In Transit","Delivered","Received By Patient"]  
           
         },
+     
+          shippingDate:req.params.startDate
+     
        
       },
 
@@ -1195,7 +1198,11 @@ const lastDay = moment().subtract(30, 'days').format('YYYY-M-DD');
           [Op.or]:["Shipped","In Transit","Delivered","Received By Patient"]  
           
         },
-       
+     
+          shippingDate: {
+           [Op.gte]: req.params.startDate,
+           [Op.lte]:req.params.endDate
+          },
       },
 
 
