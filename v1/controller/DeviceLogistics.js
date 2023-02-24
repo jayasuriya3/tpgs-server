@@ -1989,7 +1989,7 @@ module.exports.deviceWorkingStatusUpdate = async (req, res, next) => {
   try{
 const  deviceUpdate=await Device.update({
   deviceStatus:req.body.deviceStatus,
-  comment:req.body.deviceStatusComment,
+  comment:req.body.comment,
   statusCheck:"Completed",
   editedBy:req.body.editedBy,
   deviceStatusUpdateDate:new Date()
@@ -2002,7 +2002,7 @@ where:{
 )
 const  KitUpdate=await KitAccessoryInfo.update({
   deviceStatus:req.body.deviceStatus,
-  comment:req.body.deviceStatusComment,
+  comment:req.body.comment,
   statusCheck:"Completed",
   editedBy:req.body.editedBy,
   deviceStatusUpdateDate:new Date() 
