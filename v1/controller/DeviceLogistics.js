@@ -1361,7 +1361,7 @@ module.exports.completedDevice = async (req, res, next) => {
          status:{
 
         [Op.or]: ["Completed","In QC"]},
-         where: sequelize.where(sequelize.fn('DATE', sequelize.col('Kit.updatedAt')), req.params.startDate),
+
 
         //  updatedAt: {
         //   [Op.gte]: new Date(req.params.startDate),
@@ -1400,7 +1400,11 @@ module.exports.completedDevice = async (req, res, next) => {
       },
     },
     {
-    model:Logistic
+    model:Logistic,
+    where:{
+      returnDate:req.params.startDate
+    }
+
     },
     {
     model:Patient
@@ -1415,6 +1419,7 @@ module.exports.completedDevice = async (req, res, next) => {
   else{
     // if(req.params.startDate===req.params.endDate){
       console.log("req.params.startDate,endDate",req.params.startDate,req.params.endDate)
+
       // const patient = await Patient.findAll({
       //   where: {
       //     where: sequelize.where(sequelize.fn('DATE', sequelize.col('Patient.updatedAt')), req.params.startDate),
@@ -1427,10 +1432,7 @@ module.exports.completedDevice = async (req, res, next) => {
             [Op.or]: ["Completed","In QC"]},
         // where: sequelize.where(sequelize.fn('DATE', sequelize.col('Patient.updatedAt')), req.params.startDate),
 
-         updatedAt: {
-          [Op.gte]: new Date(req.params.startDate),
-          [Op.lt]: new Date(req.params.endDate)
-        } ,
+        
       }
     ,
       include:[{
@@ -1464,7 +1466,11 @@ module.exports.completedDevice = async (req, res, next) => {
       },
     },
     {
-    model:Logistic
+    model:Logistic,
+    returnDate: {
+      [Op.gte]: new Date(req.params.startDate),
+      [Op.lt]: new Date(req.params.endDate)
+    } ,
     },
     {
     model:Patient
