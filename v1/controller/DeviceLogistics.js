@@ -1358,7 +1358,9 @@ module.exports.completedDevice = async (req, res, next) => {
     const devices = await Kit.findAll({
       
         where:{
-         status:"Completed",
+         status:{
+
+        [Op.or]: ["Completed","In QC"]},
          where: sequelize.where(sequelize.fn('DATE', sequelize.col('Kit.updatedAt')), req.params.startDate),
 
         //  updatedAt: {
@@ -1420,7 +1422,9 @@ module.exports.completedDevice = async (req, res, next) => {
     const devices = await Kit.findAll({
       
         where:{
-         status:"Completed",
+          status:{
+
+            [Op.or]: ["Completed","In QC"]},
         // where: sequelize.where(sequelize.fn('DATE', sequelize.col('Patient.updatedAt')), req.params.startDate),
 
          updatedAt: {
@@ -2002,7 +2006,33 @@ where:{
 }
 }
 )
+const Kits = await KitAccessoryInfo.findAll({
+  where: {
+
+    kitId: req.body.kitId,
+    statusCheck:{
+      [Op.is]:null
+    }
+  }
+ 
+});
+console.log("kits",Kits,Kits?.length)
+
+if(Kits?.length>0){
 const  kitUpdate=await Kit.update({
+  status:"In QC",
+
+},
+{
+where:{
+  id:req.body.kitId
+}
+}
+)
+console.log(Kits)
+}
+else{
+const  CompletedCheck=await Kit.update({
   status:"Completed",
 
 },
@@ -2012,7 +2042,8 @@ where:{
 }
 }
 )
-
+console.log(CompletedCheck)
+}
    
     res.status(200).send(deviceUpdate)
    
