@@ -1159,7 +1159,7 @@ const lastDay = moment().subtract(30, 'days').format('YYYY-M-DD');
     ],
     where:{
     //  status:"Completed",
-      where: sequelize.where(sequelize.fn('DATE', sequelize.col('Kit.updatedAt')), req.params.startDate),
+   //   where: sequelize.where(sequelize.fn('DATE', sequelize.col('Kit.updatedAt')), req.params.startDate),
 
     //   updatedAt: {
     //    [Op.gte]: new Date(req.params.startDate),
@@ -1228,15 +1228,15 @@ const lastDay = moment().subtract(30, 'days').format('YYYY-M-DD');
     }
     
     ],
-    where:{
-    //  status:"Completed",
-     // where: sequelize.where(sequelize.fn('DATE', sequelize.col('Kit.updatedAt')), req.params.startDate),
+  //   where:{
+  //   //  status:"Completed",
+  //    // where: sequelize.where(sequelize.fn('DATE', sequelize.col('Kit.updatedAt')), req.params.startDate),
 
-      updatedAt: {
-       [Op.gte]: new Date(req.params.startDate),
-       [Op.lte]: new Date(req.params.endDate)
-     } ,
-   }
+  //     updatedAt: {
+  //      [Op.gte]: new Date(req.params.startDate),
+  //      [Op.lte]: new Date(req.params.endDate)
+  //    } ,
+  //  }
     // where:{
     // updatedAt: {
     //   [Op.gte]: firstDay,   
