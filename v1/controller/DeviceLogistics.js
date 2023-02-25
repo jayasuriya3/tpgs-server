@@ -2267,6 +2267,8 @@ req.body ,
 module.exports.updateLogisticReturn = async (req, res, next) => {
 
     return Logistic.update({
+      logisticName:req.body.logisticName,
+      AWB:req.body.AWB,
       shippingStatus:req.body.shippingStatus,
       returnStatus:req.body.returnStatus,
       returnAWB:req.body.returnAWB,
