@@ -1992,6 +1992,37 @@ module.exports.ReAssignKit = async (req, res, next) => {
 
 
     }
+module.exports.deleteKit = async (req, res, next) => {
+  try {
+    await Device.update({kitId:null,
+      deviceStatus:null,
+
+      },{where:{kitId: req.params.id}})
+    await KitAccessoryInfo.update({kitId:null,
+      deviceStatus:null
+      },{where:{kitId: req.params.id}})
+
+    const kit = await Kit.destroy(
+      {
+      where: {
+        id: req.params.id
+        
+      }
+    }
+    
+  )
+
+    res.status(200).send("Kit Deleted");
+  
+  } catch (error) {
+    return next({ status: 404, message: error });
+  
+  }
+
+
+
+
+    }
 module.exports.deviceWorkingStatusUpdate = async (req, res, next) => {
   try{
 const  deviceUpdate=await Device.update({

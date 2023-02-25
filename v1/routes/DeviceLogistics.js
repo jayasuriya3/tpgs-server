@@ -43,6 +43,7 @@ router.get("/getKitAccessoryMobileDevice/:KitAccessoryId", Controller.DeviceLogi
 router.post("/AssignKit", Controller.DeviceLogistics.AssignKit);
 //Reassign Kit
 router.post("/ReAssignKit", Controller.DeviceLogistics.ReAssignKit);
+router.patch("/deleteKit/:id", Controller.DeviceLogistics.deleteKit);
 //get assigned kit
 router.get("/AssignedKit/:assignStatus", Controller.DeviceLogistics.AssignedKit); 
 //AssignedKitList
