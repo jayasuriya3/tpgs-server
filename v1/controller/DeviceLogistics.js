@@ -1521,7 +1521,9 @@ module.exports.AssignedDispatchKit = async (req, res, next) => {
       {
         model:Logistic
       }
-      ]    
+      ] ,
+      order: [['assignedDate', 'ASC']]
+   
       
 
     });
