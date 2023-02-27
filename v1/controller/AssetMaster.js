@@ -705,6 +705,17 @@ module.exports.getOneDevice = async (req, res) => {
     console.log(error);
   }
 };
+module.exports.getOrderAccessoryDevice = async (req, res) => {
+  try {
+    const device = await AccessoryOrder.findOne({ where: { AccessoryOrderId: req.params.AccessoryOrderId } });
+    // const vendor =await  Vendor.findAll();
+
+    res.send(device);
+  } catch (error) {
+    res.status(400).send(error);
+    console.log(error);
+  }
+};
 module.exports.getViewAccessory = async (req, res) => {
   try {
     const device = await Device.findOne({ where: { deviceId: req.params.deviceId } });

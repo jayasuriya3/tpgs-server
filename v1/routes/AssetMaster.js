@@ -74,6 +74,8 @@ router.get("/vendorDetail/:id",Authenticate.verifyJWT, Controller.AssetMaster.ge
 router.get("/accessoryDetail/:id",Authenticate.verifyJWT, Controller.AssetMaster.getOneAccessory);
 //service detail
 router.get("/serviceDetail/:id", Authenticate.verifyJWT,Controller.AssetMaster.serviceDetail);
+
+router.get("/getOrderAccessoryDevice/:AccessoryOrderId",Controller.AssetMaster.getOrderAccessoryDevice);
 //edit a single vendor
 router.patch("/editVendor/:id",Authenticate.verifyJWT, Controller.AssetMaster.editVendor);
 
