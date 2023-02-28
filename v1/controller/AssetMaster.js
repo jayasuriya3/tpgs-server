@@ -705,6 +705,7 @@ module.exports.getOneDevice = async (req, res) => {
     console.log(error);
   }
 };
+
 module.exports.getOrderAccessoryDevice = async (req, res) => {
   try {
     const device = await AccessoryOrder.findOne({ where: { AccessoryOrderId: req.params.AccessoryOrderId } });

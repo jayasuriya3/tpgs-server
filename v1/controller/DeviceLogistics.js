@@ -1740,9 +1740,7 @@ module.exports.getPatientDetails = async (req, res, next) => {
 
         id: req.params.id
       },
-      attributes:[
-        'patientName','hospitalName'
-      ]
+    
     });
   
     res.json(kit);
