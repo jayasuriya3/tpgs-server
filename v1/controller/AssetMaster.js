@@ -3,6 +3,8 @@ const User = require("../../models").user;
 const Service = require("../../models").Service;
 const Accessory = require("../../models").Accessory;
 const Device = require("../../models").Device;
+const Kit = require("../../models").Kit;
+const Patient = require("../../models").Patient;
 const Vendor = require("../../models").Vendor;
 const GeneralDevice = require("../../models").GeneralDevice;
 const Customer = require("../../models").Customer;
@@ -1873,7 +1875,17 @@ module.exports.assignedDevice = async (req, res, next) => {
       },
       include:[{
         model:Customer
+      },
+    {
+      model:Kit,
+      include:[{
+model:Patient,
+attributes:['patientName']
       }]
+     
+    }
+    ],
+     
     });
 
     res.send(device);
@@ -1893,7 +1905,16 @@ module.exports.assignedDevice = async (req, res, next) => {
       },
       include:[{
         model:Customer
+      },
+    {
+      model:Kit,
+      include:[{
+model:Patient,
+attributes:['patientName']
       }]
+     
+    }
+    ],
     });
 
     res.send(device);
