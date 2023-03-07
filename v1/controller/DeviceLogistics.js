@@ -1854,8 +1854,17 @@ module.exports.receiptEntryReturn = async (req, res, next) => {
         {
           model:Logistic,
         where:{
-          returnStatus:req.params.returnStatus,
+          [Op.or]: [
+            {
+              returnStatus:req.params.returnStatus,
           shippingStatus:req.params.shippingStatus
+            },
+            {
+              shippingStatus: 'Delivery Failed - Return to Origin',
+            }
+          ]
+          // returnStatus:req.params.returnStatus,
+          // shippingStatus:req.params.shippingStatus
         }
       },
       {
