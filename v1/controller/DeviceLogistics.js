@@ -499,12 +499,23 @@ where:{
               model:Logistic,
               
             },
+
           {
             model:Patient,
             attributes:['patientName','hospitalName','doctorName']
           }
           ]
-          }]
+          },
+          {
+            model:Service,
+            attribute:['service']
+          },
+          {
+            model:Accessory,
+            attribute:['accessory']
+          }
+        
+        ]
 
       })
    //unassigned kits in Stock
