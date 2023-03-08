@@ -491,7 +491,7 @@ where:{
             [Op.lt]: new Date(req.params.endDate)
           } 
          
-         
+           
       },
        include:[{
             model:Kit,
