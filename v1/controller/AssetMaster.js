@@ -1294,6 +1294,8 @@ module.exports.editVendor = async (req, res) => {
         mobile: req.body.mobile,
         secondaryContactPerson: req.body.secondaryContactPerson,
         secondaryMobilePerson: req.body.secondaryMobilePerson,
+        primaryExtension: req.body.primaryExtension,
+        secondaryExtension: req.body.secondaryExtension,
         modifiedBy: req.body.modifiedBy,
       },
       { where: { id: req.params.id } }
