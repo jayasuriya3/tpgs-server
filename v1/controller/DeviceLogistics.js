@@ -1136,7 +1136,7 @@ const lastDay = moment().subtract(30, 'days').format('YYYY-M-DD');
       model:Logistic,
       where:{
         shippingStatus:{
-          [Op.or]:["Shipped","In Transit","Delivered","Received By Patient"]  
+          [Op.or]:["Shipped","In Transit","Delivered","Received By Patient","Delivery Failed - Return to Origin"]  
           
         },
      
@@ -1206,7 +1206,7 @@ const lastDay = moment().subtract(30, 'days').format('YYYY-M-DD');
       model:Logistic,
       where:{
         shippingStatus:{
-          [Op.or]:["Shipped","In Transit","Delivered","Received By Patient"]  
+          [Op.or]:["Shipped","In Transit","Delivered","Received By Patient","Delivery Failed - Return to Origin"]  
           
         },
      
