@@ -425,10 +425,10 @@ module.exports.kitDashboard = async (req, res) => {
 const kitStock= Kit.count({
 where:{
   assignStatus:"UnAssigned",
-  createdAt: {
-    [Op.gte]: new Date(req.params.startDate),
-    [Op.lt]: new Date(req.params.endDate)
-  }  
+  // createdAt: {
+  //   [Op.gte]: new Date(req.params.startDate),
+  //   [Op.lt]: new Date(req.params.endDate)
+  // }  
 
 }
 })
