@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         unique: {
           args: true,
-          msg: 'Contact Number address already in use!'
+          msg: 'Contact Number already exists'
         }
       },
       status: {
