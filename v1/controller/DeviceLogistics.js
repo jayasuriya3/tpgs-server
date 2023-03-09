@@ -453,7 +453,9 @@ where:{
 const assignedKit= Kit.count({
   where: {
 
-    assignStatus: "Assigned",
+    assignStatus: {
+      [Op.or]:["Assigned","Reassigned"]
+    },
     assignedDate: {
       [Op.gte]: new Date(req.params.startDate),
       [Op.lt]: new Date(req.params.endDate)
