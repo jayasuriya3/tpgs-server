@@ -411,13 +411,22 @@ module.exports.kitDashboard = async (req, res) => {
     const kitDelivered=  Kit.count({
   where: {
 
-    assignStatus: "Assigned",
+  //  assignStatus: "Assigned",
     assignedDate: {
       [Op.gte]: new Date(req.params.startDate),
       [Op.lt]: new Date(req.params.endDate)
     }  
    
-    }      
+    }      ,
+  
+      include:[{
+        model:Logistic,
+        where:{
+          shippingStatus:"Received By Patient"
+        }
+        
+      }],
+ 
   
 
 })
