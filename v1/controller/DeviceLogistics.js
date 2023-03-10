@@ -412,17 +412,21 @@ module.exports.kitDashboard = async (req, res) => {
   where: {
 
   //  assignStatus: "Assigned",
-    assignedDate: {
-      [Op.gte]: new Date(req.params.startDate),
-      [Op.lt]: new Date(req.params.endDate)
-    }  
+    // assignedDate: {
+    //   [Op.gte]: new Date(req.params.startDate),
+    //   [Op.lt]: new Date(req.params.endDate)
+    // }  
    
     }      ,
   
       include:[{
         model:Logistic,
         where:{
-          shippingStatus:"Received By Patient"
+          shippingStatus:"Received By Patient",
+          updatedAt: {
+            [Op.gte]: new Date(req.params.startDate),
+            [Op.lt]: new Date(req.params.endDate)
+          }  
         }
         
       }],
