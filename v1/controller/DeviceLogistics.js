@@ -556,13 +556,13 @@ const kitSummary= Kit.findAll({
 
 })
 
-const logisticAnalysis1 = await Logistic.findAll({
-  attributes: [
-    "logisticName",
-    [sequelize.fn("COUNT", sequelize.col("logisticName")), "count"],  ],
-  group: "logisticName",
-  order: sequelize.literal("count DESC")
-});
+// const logisticAnalysis1 = await Logistic.findAll({
+//   attributes: [
+//     "logisticName",
+//     [sequelize.fn("COUNT", sequelize.col("logisticName")), "count"],  ],
+//   group: "logisticName",
+//   order: sequelize.literal("count DESC")
+// });
 // const logisticAnalysis = await sequelize.query(`
 //   SELECT CONCAT(name, ' (', CAST(COUNT(*) AS VARCHAR), ')') AS name, COUNT(*) AS count FROM (
 //     SELECT "logisticName" AS name FROM "Logistics"
@@ -606,13 +606,13 @@ const logisticAnalysis = await sequelize.query(`
   type: sequelize.QueryTypes.SELECT 
 });
 
-const returnLogisticsAnalysis = await Logistic.findAll({
-  attributes: [
-    "returnLogisticsName",
-    [sequelize.fn("COUNT", sequelize.col("returnLogisticsName")), "count"],  ],
-  group: "returnLogisticsName",
-  order: sequelize.literal("count DESC")
-});
+// const returnLogisticsAnalysis = await Logistic.findAll({
+//   attributes: [
+//     "returnLogisticsName",
+//     [sequelize.fn("COUNT", sequelize.col("returnLogisticsName")), "count"],  ],
+//   group: "returnLogisticsName",
+//   order: sequelize.literal("count DESC")
+// });
 
 const logisticSummary =  Kit.findAll({
     
@@ -642,16 +642,16 @@ const logisticSummary =  Kit.findAll({
   //   console.log("result", result);
   //  //res.send(result)
   // })
-  const [PromisekitDelivered, promisekitStock,promiseComplainDevice,promiseassignedKit,promiseunassingedKit,promiseComplainedDevice,promisekitSummary,promiselogisticAnalysis,PromiselogisticSummary,PromisereturnLogisticsAnalysis,promiseLogisticAnalysis1
+  const [PromisekitDelivered, promisekitStock,promiseComplainDevice,promiseassignedKit,promiseunassingedKit,promiseComplainedDevice,promisekitSummary,promiselogisticAnalysis,PromiselogisticSummary,
     
     ] = await Promise.all([kitDelivered, kitStock,ComplainDevice,
-      assignedKit,unassignedKit,ComplainedDevice,kitSummary,logisticAnalysis,logisticSummary,returnLogisticsAnalysis,logisticAnalysis1
+      assignedKit,unassignedKit,ComplainedDevice,kitSummary,logisticAnalysis,logisticSummary,
       
       ]);
       console.timeEnd('blocking');
       
       res.status(200).json({kitDelivered:PromisekitDelivered,kitStock:promisekitStock,ComplainDevice:promiseComplainDevice,assignedKit:promiseassignedKit,unassignedKit:promiseunassingedKit,ComplainedDevice:promiseComplainedDevice,kitSummary:promisekitSummary,logisticAnalysis:promiselogisticAnalysis,
-        logisticSummary:PromiselogisticSummary,returnLogisticsAnalysis:PromisereturnLogisticsAnalysis,logisticAnalysis1:promiseLogisticAnalysis1
+        logisticSummary:PromiselogisticSummary,
       })
       
 //res.status(200).json(kitSummary)
