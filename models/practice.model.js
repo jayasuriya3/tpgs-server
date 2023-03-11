@@ -143,6 +143,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      sms_contactno: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       messenger_type: {
         type: DataTypes.STRING,
         allowNull: true,
