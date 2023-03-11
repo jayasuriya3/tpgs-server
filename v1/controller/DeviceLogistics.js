@@ -556,26 +556,63 @@ const kitSummary= Kit.findAll({
 
 })
 
-const logisticAnalysis= Logistic.findAll({
-
-  group: ["logisticName"],
+const logisticAnalysis1 = await Logistic.findAll({
   attributes: [
     "logisticName",
+    [sequelize.fn("COUNT", sequelize.col("logisticName")), "count"],  ],
+  group: "logisticName",
+  order: sequelize.literal("count DESC")
+});
+// const logisticAnalysis = await sequelize.query(`
+//   SELECT CONCAT(name, ' (', CAST(COUNT(*) AS VARCHAR), ')') AS name, COUNT(*) AS count FROM (
+//     SELECT "logisticName" AS name FROM "Logistics"
+//     UNION ALL
+//     SELECT "returnLogisticsName" AS name FROM "Logistics"
+//   ) AS combinedNames
+//   GROUP BY name
+//   ORDER BY count DESC;
+// `, { type: sequelize.QueryTypes.SELECT });
 
-    [sequelize.fn("COUNT", sequelize.col("logisticName")), "count"],
-  ],
-  order: [[Sequelize.literal("count"), "DESC"]],
-  where: { 
-    
-    createdAt: {
-      [Op.gte]: new Date(req.params.startDate),
-      [Op.lt]: new Date(req.params.endDate)
-    }
-  }, 
-  includeIgnoreAttributes: false,
+// const logisticAnalysis = await sequelize.query(`
+//   SELECT name, COUNT(*) AS count FROM (
+//     SELECT "logisticName" AS name FROM "Logistics"
+//     UNION ALL
+//     SELECT "returnLogisticsName" AS name FROM "Logistics"
+//   ) AS combinedNames
+//   GROUP BY name
+//   ORDER BY count DESC;
+// `, { type: sequelize.QueryTypes.SELECT });
 
-  raw: true,
-})
+const startDate = new Date(req.params.startDate);
+const endDate = new Date(req.params.endDate);
+startDate.setHours(0, 0, 0, 0);
+endDate.setHours(23, 59, 59, 999);
+
+const logisticAnalysis = await sequelize.query(`
+  SELECT name, COUNT(*) AS count FROM (
+    SELECT "logisticName" AS name FROM "Logistics"     WHERE "logisticName" IS NOT NULL AND "updatedAt" >= :startDate AND "updatedAt" <= :endDate
+
+    UNION ALL
+    SELECT "returnLogisticsName" AS name FROM "Logistics"
+    WHERE "returnLogisticsName" IS NOT NULL AND "updatedAt" >= :startDate AND "updatedAt" <= :endDate
+    UNION ALL
+    SELECT "logisticName" AS name FROM "Logistics"
+    WHERE "logisticName" IS NOT NULL AND "updatedAt" >= :startDate AND "updatedAt" <= :endDate
+  ) AS combinedNames
+  GROUP BY name
+  ORDER BY count DESC;
+`, { 
+  replacements: { startDate, endDate },
+  type: sequelize.QueryTypes.SELECT 
+});
+
+const returnLogisticsAnalysis = await Logistic.findAll({
+  attributes: [
+    "returnLogisticsName",
+    [sequelize.fn("COUNT", sequelize.col("returnLogisticsName")), "count"],  ],
+  group: "returnLogisticsName",
+  order: sequelize.literal("count DESC")
+});
 
 const logisticSummary =  Kit.findAll({
     
@@ -605,16 +642,16 @@ const logisticSummary =  Kit.findAll({
   //   console.log("result", result);
   //  //res.send(result)
   // })
-  const [PromisekitDelivered, promisekitStock,promiseComplainDevice,promiseassignedKit,promiseunassingedKit,promiseComplainedDevice,promisekitSummary,promiselogisticAnalysis,PromiselogisticSummary
+  const [PromisekitDelivered, promisekitStock,promiseComplainDevice,promiseassignedKit,promiseunassingedKit,promiseComplainedDevice,promisekitSummary,promiselogisticAnalysis,PromiselogisticSummary,PromisereturnLogisticsAnalysis,promiseLogisticAnalysis1
     
     ] = await Promise.all([kitDelivered, kitStock,ComplainDevice,
-      assignedKit,unassignedKit,ComplainedDevice,kitSummary,logisticAnalysis,logisticSummary
+      assignedKit,unassignedKit,ComplainedDevice,kitSummary,logisticAnalysis,logisticSummary,returnLogisticsAnalysis,logisticAnalysis1
       
       ]);
       console.timeEnd('blocking');
       
       res.status(200).json({kitDelivered:PromisekitDelivered,kitStock:promisekitStock,ComplainDevice:promiseComplainDevice,assignedKit:promiseassignedKit,unassignedKit:promiseunassingedKit,ComplainedDevice:promiseComplainedDevice,kitSummary:promisekitSummary,logisticAnalysis:promiselogisticAnalysis,
-        logisticSummary:PromiselogisticSummary
+        logisticSummary:PromiselogisticSummary,returnLogisticsAnalysis:PromisereturnLogisticsAnalysis,logisticAnalysis1:promiseLogisticAnalysis1
       })
       
 //res.status(200).json(kitSummary)
