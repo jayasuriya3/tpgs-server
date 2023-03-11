@@ -151,6 +151,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      messenger_notification: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       messenger_number: {
         type: DataTypes.STRING,
         allowNull: true,
