@@ -479,7 +479,7 @@ const assignedKit= Kit.count({
 
 })
    //unassigned kits in Stock
-const unassignedKit= Kit.count({
+const unassignedKit= Patient.count({
 where:{
   assignStatus:"UnAssigned",
   // createdAt: {
