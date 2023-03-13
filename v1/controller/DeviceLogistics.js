@@ -2276,7 +2276,8 @@ req.body ,
           shippingDate:req.body.shippingDate,
           returnAWB:req.body.returnAWB,
          
-          returnLogisticsName:req.body.returnLogisticsName
+          returnLogisticsName:req.body.returnLogisticsName,
+          modifiedBy:req.body.modifiedBy
     
         })
         const kitUpdate=await Kit.update({
