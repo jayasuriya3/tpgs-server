@@ -595,9 +595,7 @@ const logisticAnalysis = await sequelize.query(`
     UNION ALL
     SELECT "returnLogisticsName" AS name FROM "Logistics"
     WHERE "returnLogisticsName" IS NOT NULL AND "updatedAt" >= :startDate AND "updatedAt" <= :endDate
-    UNION ALL
-    SELECT "logisticName" AS name FROM "Logistics"
-    WHERE "logisticName" IS NOT NULL AND "updatedAt" >= :startDate AND "updatedAt" <= :endDate
+ 
   ) AS combinedNames
   GROUP BY name
   ORDER BY count DESC;
