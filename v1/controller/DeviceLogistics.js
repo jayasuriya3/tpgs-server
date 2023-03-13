@@ -653,7 +653,6 @@ const logisticSummary =  Kit.findAll({
       })
       
 //res.status(200).json(kitSummary)
-console.timeEnd("kitDashboard")
 
   } catch (error) {
     res.status(400).send(error);
