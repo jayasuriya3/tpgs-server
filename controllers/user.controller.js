@@ -308,10 +308,11 @@ exports.getCustomerAssignedIds = async (req, res) => {
 			})
 		})
 		const targetRoles = targetRole ? targetRole.split(',') : null;
-		console.log(targetRoles);
+		console.log("target roles", targetRoles);
 		console.log({ referenceIds, rest, type });
 		let findAssignedUser = [];
 		let findNotAssignedUser = [];
+
 
 		switch (type) {
 			case "USER": {
@@ -326,7 +327,12 @@ exports.getCustomerAssignedIds = async (req, res) => {
 				assignedUserData.map((data) => {
 					targetRoles.map((elm)=>{
 						if(JSON.parse(data.role?.toLowerCase()).includes(elm.toLowerCase())){
-							findAssignedUser.push(data);
+						//	findAssignedUser.push(data);
+							if(!findAssignedUser.includes(data)){
+								findAssignedUser.push(data);
+
+							}
+
 						}
 					})
 				})
@@ -339,16 +345,27 @@ exports.getCustomerAssignedIds = async (req, res) => {
 					},
 				});
 				console.log("unassignedUserData",unassignedUserData)
+
 				unassignedUserData.map((data) => {
-					console.log(data.role?.toLowerCase())
+					console.log("role",data.role?.toLowerCase())
 					targetRoles.map((elm)=>{
 						if(JSON.parse(data.role?.toLowerCase()).includes(elm.toLowerCase())){
-							findNotAssignedUser.push(data);
+							if(!findNotAssignedUser.includes(data)){
+								findNotAssignedUser.push(data);
+
+							}
+							// uniqueUserData.add(data);
+							// console.log("uniqueUserData",uniqueUserData)
+
+
 						}
 					})
 				})
+			
+
 				break;
 			}
+
 			case "PRACTICE": {
 				findAssignedUser = await Practices.findAll({
 					where: {
@@ -910,7 +927,6 @@ exports.practiceGetAssign = async (req, res) => {
 			status: true
 		}
 	})
-
 	var response = {
 		status: "success",
 		notAssigned: unassignedPractice,
@@ -990,7 +1006,7 @@ exports.getAssign = async (req, res) => {
 				: {}),
 		},
 	});
-
+console.log("not assinged",findNotAssignedUser)
 	var response = {
 		status: "success",
 		notAssigned: findNotAssignedUser,
