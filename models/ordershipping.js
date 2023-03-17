@@ -14,6 +14,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   OrderShipping.init({
+    id:{
+      type:DataTypes.INTEGER,
+      primaryKey:true,
+      unique:true
+  },
     logisticsName: DataTypes.STRING,
     shippingStatus: DataTypes.STRING,
     AWB: DataTypes.STRING,

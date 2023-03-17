@@ -212,6 +212,11 @@ exports.getAllData = (req, res) => {
 	console.log({ userType });
 	User.findAll({
 		order: [["created_at", "DESC"]],
+		include: [{ model: User,as: 'managers'  },
+		{ model: User,as: 'supervisor'  }
+	
+	],
+
 		where: {
 			...(userType
 				? {
@@ -226,6 +231,7 @@ exports.getAllData = (req, res) => {
 		},
 	})
 		.then((data) => {
+			console.log("data")
 			res.send(data);
 		})
 		.catch((err) => {
@@ -412,6 +418,18 @@ exports.customerAssign = async (req, res) => {
 			const linkedData = await CustomerAssign.destroy({
 				where: { assigned_id: req.body.deleted_id, type }
 			});
+			const userUpdate=		await User.update({
+				referenceId:null,
+				supervisorId:null
+			},
+			{
+				where:{
+					id:req.body.deleted_id
+				}
+			}
+			);
+			console.log("deleted user",userUpdate, assigned_id)
+
 		}
 		const dateNow = new Date().toISOString();
 		const previousUsers = await CustomerAssign.findOne({
@@ -428,6 +446,7 @@ exports.customerAssign = async (req, res) => {
 				},
 			});
 		}
+		console.log("reference id",req.body.referenceId)
 		const result = await CustomerAssign.update(
 			{
 				type,
@@ -438,6 +457,17 @@ exports.customerAssign = async (req, res) => {
 			},
 			{ where: { assigned_id, type } }
 		);
+const userUpdate=		await User.update({
+			referenceId:req.body.referenceId,
+			supervisorId:req.body.supervisorId
+		},
+		{
+			where:{
+				id:referenceIds
+			}
+		}
+		);
+		console.log("user Update",userUpdate)
 
 		if (result.length && !result[0]) {
 			await CustomerAssign.create({
@@ -447,6 +477,19 @@ exports.customerAssign = async (req, res) => {
 				createdAt: dateNow,
 				updatedAt: dateNow,
 			});
+			// await User.update({
+			// 	manager:req.body.managerName,
+			// 	referenceId:req.body.referenceId,
+			// 	supervisorId:req.body.supervisorId
+
+
+			// },
+			// {
+			// 	where:{
+			// 		id:referenceIds
+			// 	}
+			// }
+			// );
 		}
 		res.send({
 			status: "success",

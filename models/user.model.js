@@ -120,6 +120,13 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      manager: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      referenceId: { type: DataTypes.INTEGER },
+      supervisorId: { type: DataTypes.INTEGER },
+
       modified_by: {
         type: DataTypes.STRING,
         allowNull: false,

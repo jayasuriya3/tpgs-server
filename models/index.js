@@ -74,6 +74,9 @@ db.sequelize = sequelize;
       db.Kit.hasMany(db.KitAccessoryInfo, { foreignKey: 'kitId' }),
       db.Logistic.belongsTo(db.Kit, { foreignKey: 'kitId' }),
       db.Kit.hasOne(db.Logistic, { foreignKey: 'kitId' }),
+      db.user.belongsTo(db.user, {  as: 'managers', foreignKey: 'referenceId' })
+      db.user.belongsTo(db.user, {  as: 'supervisor', foreignKey: 'supervisorId' })
+
 
   //
   // db.Service.hasMany(db.Device)  g
